@@ -28,8 +28,7 @@
       ExtensionUpdate = false;
     };
 
-    profiles.duck = {
-      isDefault = true;
+    profiles.default = {
       search = {
         default = "ddg";
         privateDefault = "ddg";
@@ -48,6 +47,8 @@
         "datareporting.healthreport.uploadEnabled" = false;
         "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
       };
+
+      extensions.force = true;
 
       extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
         bitwarden
