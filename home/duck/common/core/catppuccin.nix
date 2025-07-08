@@ -6,8 +6,5 @@
   catppuccin = {
     flavor = "frappe";
     enable = true;
-    gtk.enable = false;
-
-    mako.enable = false;
   };
 }
