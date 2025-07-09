@@ -2,7 +2,6 @@
   imports = [
     ../common/core
 
-    ../common/optional/gnome.nix
     ../common/optional/kitty.nix
     ../common/optional/libreoffice.nix
     ../common/optional/mpv.nix
