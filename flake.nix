@@ -75,9 +75,9 @@
           ./hosts/pond
         ];
       };
-      
+
       owlery = nixpkgs.lib.nixosSystem {
-      	specialArgs = {inherit inputs configLib;};
+        specialArgs = {inherit inputs configLib;};
         modules = [
           ./hosts/owlery
         ];
