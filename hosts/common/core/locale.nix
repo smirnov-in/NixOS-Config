@@ -6,6 +6,6 @@
   services.xserver.xkb = {
     layout = "us,ru";
     variant = "";
-    options = "shift:both_capslock_cancel,caps:escape,grp:shift_caps_toggle";
+    options = "shift:both_capslock_cancel,caps:escape";
   };
 }
