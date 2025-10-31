@@ -12,15 +12,14 @@ in {
   programs.ssh = {
     enable = true;
 
-    userKnownHostsFile = "${config.home.homeDirectory}/.ssh/known_hosts.d/hosts";
+    matchBlocks."*" = {
+      addKeysToAgent = "yes";
+      userKnownHostsFile = "${config.home.homeDirectory}/.ssh/known_hosts.d/hosts";
 
-    controlMaster = "auto";
-    controlPath = "~/.ssh/sockets/S.%r@%h:%p";
-    controlPersist = "10m";
-
-    extraConfig = ''
-      AddKeysToAgent yes
-    '';
+      controlMaster = "auto";
+      controlPath = "~/.ssh/sockets/S.%r@%h:%p";
+      controlPersist = "10m";
+    };
   };
 
   home =
@@ -42,6 +41,6 @@ in {
     };
 
   systemd.user.tmpfiles.rules = [
-    "L ${config.home.homeDirectory}/.ssh/known_hosts - - - - ${config.programs.ssh.userKnownHostsFile}"
+    "L ${config.home.homeDirectory}/.ssh/known_hosts - - - - ${config.home.homeDirectory}/.ssh/known_hosts.d/hosts"
   ];
 }
