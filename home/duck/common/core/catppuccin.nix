@@ -4,7 +4,7 @@
   ];
 
   catppuccin = {
-    flavor = "frappe";
+    flavor = "macchiato";
     enable = true;
   };
 }
