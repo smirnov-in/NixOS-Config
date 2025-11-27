@@ -7,19 +7,17 @@
 }: let
   pathToKeys = configLib.relativeToRoot "hosts/common/users/${config.home.username}/keys";
 in {
-  services.ssh-agent.enable = true;
-
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
 
     matchBlocks."*" = {
-      addKeysToAgent = "yes";
       userKnownHostsFile = "${config.home.homeDirectory}/.ssh/known_hosts.d/hosts";
-
       controlMaster = "auto";
-      controlPath = "~/.ssh/sockets/S.%r@%h:%p";
+      controlPath = "${config.home.homeDirectory}/.ssh/sockets/S.%r@%h:%p";
       controlPersist = "10m";
+
+      addKeysToAgent = "yes";
     };
   };
 
