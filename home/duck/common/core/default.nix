@@ -23,8 +23,6 @@
     username = "duck";
     homeDirectory = "/home/${config.home.username}";
 
-    shell.enableFishIntegration = true;
-
     sessionVariables = {
       FLAKE = "$HOME/Projects/NixOS-Config";
       NH_FLAKE = "$HOME/Projects/NixOS-Config";
