@@ -20,7 +20,7 @@
     extraModulePackages = [];
     kernelParams = ["quiet" "udev.log_level=3" "amdgpu.dcdebugmask=0x10" "nvidia_drm.fbdev=1"];
     consoleLogLevel = 0;
-    # plymouth.enable = true;
+    plymouth.enable = true;
 
     initrd = {
       verbose = false;
