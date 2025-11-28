@@ -5,5 +5,6 @@
     ./nix.nix
     ./sops.nix
     ./ssh.nix
+    ./stylix.nix
   ];
 }
