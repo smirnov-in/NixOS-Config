@@ -60,6 +60,8 @@
     };
   };
 
+  stylix.targets.firefox.profileNames = ["default"];
+
   home = lib.optionalAttrs (options.home ? "persistence") {
     persistence = {
       "/persist/${config.home.homeDirectory}" = {

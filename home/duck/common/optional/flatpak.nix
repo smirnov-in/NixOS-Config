@@ -25,12 +25,12 @@
       };
     };
 
-    overrides = {
-      global.Environment = {
-        XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
-        GTK_THEME = "Adwaita:dark";
-      };
-    };
+    # overrides = {
+    #   global.Environment = {
+    #     XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
+    #     GTK_THEME = "Adwaita:dark";
+    #   };
+    # };
   };
 
   home = lib.optionalAttrs (options.home ? "persistence") {

@@ -2,10 +2,10 @@
   programs.kitty = {
     enable = true;
 
-    font = {
-      name = "JetBrains Mono";
-      package = pkgs.jetbrains-mono;
-    };
+    # font = {
+    #   name = "JetBrains Mono";
+    #   package = pkgs.jetbrains-mono;
+    # };
 
     settings = {
       # background_opacity = 0.8;
