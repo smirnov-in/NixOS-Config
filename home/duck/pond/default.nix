@@ -11,6 +11,7 @@
     ../common/optional/libreoffice.nix
     ../common/optional/mpv.nix
     ../common/optional/nix-index.nix
+    ../common/optional/niri.nix
     ../common/optional/steam.nix
     ../common/optional/telegram.nix
     ../common/optional/transmission.nix
