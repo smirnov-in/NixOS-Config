@@ -43,10 +43,6 @@
       flake = false;
     };
 
-    nix-catppuccin = {
-      url = "github:catppuccin/nix";
-    };
-
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
     };
@@ -57,6 +53,15 @@
         nixpkgs.follows = "nixpkgs";
         home-manager.follows = "home-manager";
       };
+    };
+
+    stylix = {
+      url = "github:nix-community/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nix-niri = {
+      url = "github:sodiboo/niri-flake";
     };
   };
 
