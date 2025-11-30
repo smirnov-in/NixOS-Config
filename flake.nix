@@ -55,9 +55,8 @@
       };
     };
 
-    stylix = {
-      url = "github:nix-community/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
+    nix-catppuccin = {
+      url = "github:catppuccin/nix";
     };
 
     nix-niri = {

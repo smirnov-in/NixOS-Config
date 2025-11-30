@@ -3,6 +3,7 @@
     ./atuin.nix
     ./bat.nix
     ./btop.nix
+    ./catppuccin.nix
     ./direnv.nix
     ./eza.nix
     ./fd.nix
