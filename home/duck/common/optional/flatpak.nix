@@ -3,19 +3,14 @@
   inputs,
   lib,
   options,
+  pkgs,
   ...
 }: {
   imports = [
     inputs.nix-flatpak.homeManagerModules.nix-flatpak
   ];
 
-  # home.packages = with pkgs; [
-  #   flatpak
-  # ];
-
   services.flatpak = {
-    uninstallUnmanaged = true;
-
     update = {
       onActivation = true;
 
@@ -24,27 +19,20 @@
         onCalendar = "weekly";
       };
     };
-
-    # overrides = {
-    #   global.Environment = {
-    #     XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
-    #     GTK_THEME = "Adwaita:dark";
-    #   };
-    # };
   };
 
-  home = lib.optionalAttrs (options.home ? "persistence") {
-    persistence = {
-      "/persist/${config.home.homeDirectory}" = {
-        directories = [
-          ".local/share/flatpak"
-          # ".local/share/flatpak/app"
-          # ".local/share/flatpak/exports/bin"
-          # ".local/share/flatpak/exports/share/applications"
-          # ".local/share/flatpak/runtime"
-          ".var/app"
-        ];
+  home =
+    {
+      packages = with pkgs; [flatpak];
+    }
+    // lib.optionalAttrs (options.home ? "persistence") {
+      persistence = {
+        "/persist/${config.home.homeDirectory}" = {
+          directories = [
+            ".local/share/flatpak"
+            ".var/app"
+          ];
+        };
       };
     };
-  };
 }
