@@ -2,7 +2,6 @@
   imports = [
     ../common/core
 
-    ../common/optional/cosmic.nix
     ../common/optional/firefox.nix
     ../common/optional/flatpak.nix
     ../common/optional/impermanence.nix
