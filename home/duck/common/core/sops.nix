@@ -1,6 +1,8 @@
 {
-  inputs,
   config,
+  inputs,
+  lib,
+  options,
   ...
 }: let
   secretsPath = builtins.toString inputs.nix-secrets;
@@ -22,6 +24,16 @@ in {
       };
       "ssh-keys/karp" = {
         path = "${homeDirectory}/.ssh/id_karp";
+      };
+    };
+  };
+
+  home = lib.optionalAttrs (options.home ? "persistence") {
+    persistence = {
+      "/persist/${config.home.homeDirectory}" = {
+        directories = [
+          ".config/sops"
+        ];
       };
     };
   };
