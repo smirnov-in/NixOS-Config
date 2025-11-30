@@ -1,11 +1,16 @@
 {
-  services.flatpak = {
-    packages = [
-      "com.valvesoftware.Steam"
-    ];
-
-    overrides."com.valvesoftware.Steam".Context = {
-      nofilesystem = "/home";
+  config,
+  lib,
+  options,
+  ...
+}: {
+  home = lib.optionalAttrs (options.home ? "persistence") {
+    persistence = {
+      "/persist/${config.home.homeDirectory}" = {
+        directories = [
+          ".local/share/Steam"
+        ];
+      };
     };
   };
 }

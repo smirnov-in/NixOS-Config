@@ -8,6 +8,7 @@
     ../common/optional/impermanence.nix
     ../common/optional/niri.nix
     ../common/optional/printing.nix
+    ../common/optional/steam.nix
     ../common/optional/yubikey.nix
 
     ../common/users/duck
