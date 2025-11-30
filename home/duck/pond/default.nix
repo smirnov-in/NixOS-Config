@@ -5,7 +5,6 @@
     ../common/optional/cosmic.nix
     ../common/optional/firefox.nix
     ../common/optional/flatpak.nix
-    ../common/optional/gnome.nix
     ../common/optional/impermanence.nix
     ../common/optional/kitty.nix
     ../common/optional/libreoffice.nix

@@ -6,7 +6,6 @@
 
     # ../common/optional/amnezia.nix
     ../common/optional/cosmic.nix
-    ../common/optional/gnome.nix
     ../common/optional/impermanence.nix
     ../common/optional/niri.nix
     ../common/optional/packages.nix
