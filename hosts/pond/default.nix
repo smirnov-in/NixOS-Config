@@ -5,7 +5,6 @@
     ../common/core
 
     # ../common/optional/amnezia.nix
-    ../common/optional/cosmic.nix
     ../common/optional/impermanence.nix
     ../common/optional/niri.nix
     ../common/optional/printing.nix

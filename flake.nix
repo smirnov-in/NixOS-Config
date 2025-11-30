@@ -47,14 +47,6 @@
       url = "github:nix-community/nix-vscode-extensions";
     };
 
-    cosmic-manager = {
-      url = "github:HeitorAugustoLN/cosmic-manager";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        home-manager.follows = "home-manager";
-      };
-    };
-
     nix-catppuccin = {
       url = "github:catppuccin/nix";
     };
