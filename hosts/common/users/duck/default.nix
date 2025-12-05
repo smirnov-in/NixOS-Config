@@ -25,7 +25,7 @@
     users.duck = {
       isNormalUser = true;
       hashedPasswordFile = config.sops.secrets.duck-password.path;
-      extraGroups = ["networkmanager" "wheel"];
+      extraGroups = ["networkmanager" "transmission" "wheel"];
       openssh.authorizedKeys.keyFiles = [./keys/id_pike.pub];
     };
   };
