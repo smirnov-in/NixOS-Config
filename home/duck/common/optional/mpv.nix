@@ -1,5 +1,7 @@
 {
-	programs.mpv = {
-		enable = true;
-	};
+  programs.mpv = {
+    enable = true;
+  };
+
+  catppuccin.mpv.enable = false;
 }
