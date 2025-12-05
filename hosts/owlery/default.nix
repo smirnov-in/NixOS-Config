@@ -4,7 +4,6 @@
 
     ../common/core
 
-    ../common/optional/cosmic.nix
     ../common/optional/fingerprint.nix
 
     ../common/users/duck
