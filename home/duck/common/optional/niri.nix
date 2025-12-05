@@ -14,6 +14,13 @@
 in {
   imports = [inputs.noctalia.homeModules.default];
   programs.niri.settings = {
+    input = {
+      keyboard.xkb = {
+        layout = "us,ru";
+        options = "shift:both_capslock_cancel,caps:escape,grp:win_space_toggle";
+      };
+    };
+    };
     prefer-no-csd = true;
     hotkey-overlay.skip-at-startup = true;
 
