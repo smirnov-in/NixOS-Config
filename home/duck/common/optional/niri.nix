@@ -15,6 +15,11 @@ in {
   imports = [inputs.noctalia.homeModules.default];
   programs.niri.settings = {
     input = {
+      focus-follows-mouse = {
+        enable = true;
+        max-scroll-amount = "90%";
+      };
+
       keyboard.xkb = {
         layout = "us,ru";
         options = "shift:both_capslock_cancel,caps:escape,grp:win_space_toggle";
@@ -25,6 +30,24 @@ in {
         accel-speed = 0.2;
       };
     };
+
+    outputs = {
+      "PNP(AOC) 24P1W1 UIRNAHA017694" = {
+        position = {
+          x = 0;
+          y = 0;
+        };
+      };
+
+      "PNP(AOC) 24P1W1 GRJK9HA094717" = {
+        position = {
+          x = 1920;
+          y = 0;
+        };
+      };
+    };
+
+    cursor.theme = "Adwaita";
 
     gestures = {
       hot-corners.enable = false;
@@ -85,6 +108,16 @@ in {
       "Mod+Shift+L".action = move-column-right;
       "Mod+Shift+U".action = move-window-down;
       "Mod+Shift+I".action = move-window-up;
+
+      "Mod+Ctrl+H".action = focus-monitor-left;
+      "Mod+Ctrl+J".action = focus-monitor-down;
+      "Mod+Ctrl+K".action = focus-monitor-up;
+      "Mod+Ctrl+L".action = focus-monitor-right;
+
+      "Mod+Shift+Ctrl+H".action = move-column-to-monitor-left;
+      "Mod+Shift+Ctrl+J".action = move-column-to-monitor-down;
+      "Mod+Shift+Ctrl+K".action = move-column-to-monitor-up;
+      "Mod+Shift+Ctrl+L".action = move-column-to-monitor-right;
 
       "Mod+BracketLeft".action = consume-or-expel-window-left;
       "Mod+BracketRight".action = consume-or-expel-window-right;
