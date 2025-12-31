@@ -9,7 +9,6 @@
     ../common/optional/niri.nix
     ../common/optional/openconnect.nix
     ../common/optional/telegram.nix
-    ../common/optional/steam.nix
     ../common/optional/vscode.nix
   ];
 
