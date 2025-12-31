@@ -38,10 +38,10 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
-  hardware.openrazer = {
-    enable = true;
-    users = ["duck"];
-  };
+  # hardware.openrazer = {
+  #   enable = true;
+  #   users = ["duck"];
+  # };
 
   services.fprintd = {
     enable = true;
