@@ -5,7 +5,7 @@
   options,
   ...
 }: let
-  secretsPath = builtins.toString inputs.nix-secrets;
+  secretsPath = toString inputs.nix-secrets;
   homeDirectory = config.home.homeDirectory;
 in {
   imports = [
@@ -30,7 +30,7 @@ in {
 
   home = lib.optionalAttrs (options.home ? "persistence") {
     persistence = {
-      "/persist/${config.home.homeDirectory}" = {
+      "/persist" = {
         directories = [
           ".config/sops"
         ];

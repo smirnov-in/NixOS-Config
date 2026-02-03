@@ -1,4 +1,13 @@
-{pkgs, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: let
+  rootPath =
+    if config.environment ? "persistence"
+    then "/persist"
+    else "";
+in {
   environment.systemPackages = with pkgs; [
     yubioath-flutter
     yubikey-manager
@@ -17,7 +26,7 @@
       enable = true;
       settings = {
         cue = true;
-        authFile = "/home/duck/.config/Yubico/u2f_keys";
+        authFile = "${rootPath}/home/duck/.config/Yubico/u2f_keys";
       };
     };
 

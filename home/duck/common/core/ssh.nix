@@ -30,7 +30,7 @@ in {
     }
     // lib.optionalAttrs (options.home ? "persistence") {
       persistence = {
-        "/persist/${config.home.homeDirectory}" = {
+        "/persist" = {
           directories = [
             ".ssh/known_hosts.d"
             ".ssh/sockets"

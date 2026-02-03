@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   options,
   pkgs,
@@ -13,7 +12,7 @@
     }
     // lib.optionalAttrs (options.home ? "persistence") {
       persistence = {
-        "/persist/${config.home.homeDirectory}" = {
+        "/persist" = {
           directories = [
             ".local/share/TelegramDesktop"
           ];

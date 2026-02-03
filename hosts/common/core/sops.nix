@@ -5,9 +5,9 @@
 }: let
   rootPath =
     if config.environment ? "persistence"
-    then "/persist/system"
+    then "/persist"
     else "";
-  secretsPath = builtins.toString inputs.nix-secrets;
+  secretsPath = toString inputs.nix-secrets;
 in {
   imports = [
     inputs.sops-nix.nixosModules.sops

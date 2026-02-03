@@ -1,5 +1,4 @@
 {
-  config,
   inputs,
   lib,
   options,
@@ -24,16 +23,16 @@
       };
 
       extensions = with inputs.nix-vscode-extensions.extensions."x86_64-linux".open-vsx; [
-        myriad-dreamin.tinymist
-        jnoortheen.nix-ide
-        maximedenes.vscoq
+        # myriad-dreamin.tinymist
+        # jnoortheen.nix-ide
+        # maximedenes.vscoq
       ];
     };
   };
 
   home = lib.optionalAttrs (options.home ? "persistence") {
     persistence = {
-      "/persist/${config.home.homeDirectory}" = {
+      "/persist" = {
         directories = [
           ".config/VSCodium/Backups"
           ".config/VSCodium/blob_storage"

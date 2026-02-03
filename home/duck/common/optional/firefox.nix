@@ -1,5 +1,4 @@
 {
-  config,
   inputs,
   lib,
   options,
@@ -62,7 +61,7 @@
 
   home = lib.optionalAttrs (options.home ? "persistence") {
     persistence = {
-      "/persist/${config.home.homeDirectory}" = {
+      "/persist" = {
         # directories = [
         #   ".mozilla/firefox"
         # ];

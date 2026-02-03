@@ -1,5 +1,4 @@
 {
-  config,
   inputs,
   lib,
   ...
@@ -34,8 +33,9 @@
   '';
 
   fileSystems."/persist".neededForBoot = true;
-  environment.persistence."/persist/system" = {
+  environment.persistence."/persist" = {
     hideMounts = true;
+    allowTrash = true;
     directories = [
       "/var/log"
       "/var/lib/bluetooth"
@@ -57,22 +57,10 @@
     users.duck = {
       directories = [
         ".mozilla"
-
         ".config/Yubico"
       ];
     };
   };
-
-  system.activationScripts.persistent-dirs.text = let
-    mkHomePersist = user:
-      lib.optionalString user.createHome ''
-        mkdir -p /persist/${user.home}
-        chown ${user.name}:${user.group} /persist/${user.home}
-        chmod ${user.homeMode} /persist/${user.home}
-      '';
-    users = lib.attrValues config.users.users;
-  in
-    lib.concatLines (map mkHomePersist users);
 
   boot.initrd.systemd.suppressedUnits = ["systemd-machine-id-commit.service"];
   systemd.suppressedSystemUnits = ["systemd-machine-id-commit.service"];

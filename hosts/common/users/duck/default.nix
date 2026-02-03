@@ -4,7 +4,12 @@
   pkgs,
   inputs,
   ...
-}: {
+}: let
+  rootPath =
+    if config.environment ? "persistence"
+    then "/persist"
+    else "";
+in {
   imports = [
     inputs.home-manager.nixosModules.default
   ];
@@ -14,7 +19,7 @@
     "yubico/u2f_keys" = {
       owner = "duck";
       inherit (config.users.users.duck) group;
-      path = "/home/duck/.config/Yubico/u2f_keys";
+      path = "${rootPath}/home/duck/.config/Yubico/u2f_keys";
     };
   };
 

@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   options,
   ...
@@ -14,9 +13,12 @@
     }
     // lib.optionalAttrs (options.home ? "persistence") {
       persistence = {
-        "/persist/${config.home.homeDirectory}" = {
+        "/persist" = {
           files = [
-            ".local/share/fish/fish_history"
+            {
+              file = ".local/share/fish/fish_history";
+              method = "symlink";
+            }
           ];
         };
       };
