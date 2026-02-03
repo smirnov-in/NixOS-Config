@@ -4,6 +4,7 @@
 
     ../common/core
 
+    ../common/optional/amnezia.nix
     ../common/optional/fingerprint.nix
     ../common/optional/niri.nix
     ../common/optional/printing.nix
