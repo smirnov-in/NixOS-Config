@@ -2,16 +2,13 @@
   programs.kitty = {
     enable = true;
 
-    # font = {
-    #   name = "JetBrains Mono";
-    #   package = pkgs.jetbrains-mono;
-    # };
-
-    settings = {
-      # background_opacity = 0.8;
-      # hide_window_decorations = "yes";
+    font = {
+      name = "JetBrains Mono";
+      package = pkgs.jetbrains-mono;
     };
 
     shellIntegration.enableFishIntegration = true;
   };
+
+  home.packages = [pkgs.jetbrains-mono];
 }
