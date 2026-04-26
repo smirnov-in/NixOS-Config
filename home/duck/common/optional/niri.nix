@@ -14,6 +14,11 @@
 in {
   imports = [inputs.noctalia.homeModules.default];
   programs.niri.settings = {
+    spawn-at-startup = [
+      {
+        command = ["noctalia-shell"];
+      }
+    ];
     input = {
       focus-follows-mouse = {
         enable = true;
@@ -163,6 +168,5 @@ in {
 
   programs.noctalia-shell = {
     enable = true;
-    systemd.enable = true;
   };
 }
