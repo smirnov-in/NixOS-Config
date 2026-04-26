@@ -1,5 +1,4 @@
 {
-  inputs,
   lib,
   options,
   pkgs,
@@ -14,18 +13,16 @@
       enableUpdateCheck = false;
 
       userSettings = {
-        "[nix]"."editor.tabSize" = 2;
         "extensions.autoUpdate" = false;
         "editor.formatOnSave" = true;
-        "vscoq.proof.mode" = 1;
-        "nix.enableLanguageServer" = true;
-        "nix.serverPath" = "nixd";
+        "editor.fontFamily" = "JetBrains Mono";
+        "editor.fontLigatures" = true;
       };
 
-      extensions = with inputs.nix-vscode-extensions.extensions."x86_64-linux".open-vsx; [
-        # myriad-dreamin.tinymist
-        # jnoortheen.nix-ide
-        # maximedenes.vscoq
+      extensions = with pkgs.vscode-extensions; [
+        rocq-prover.vsrocq
+        leanprover.lean4
+        tamasfe.even-better-toml
       ];
     };
   };
