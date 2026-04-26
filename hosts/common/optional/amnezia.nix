@@ -1,3 +1,3 @@
-{
-  programs.amnezia-vpn.enable = true;
+{pkgs, ...}: {
+  environment.systemPackages = [pkgs.amneziawg-tools];
 }
