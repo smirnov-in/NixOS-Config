@@ -36,6 +36,8 @@ in {
       };
     };
 
+    clipboard.disable-primary = true;
+
     outputs = {
       "PNP(AOC) 24P1W1 UIRNAHA017694" = {
         position = {
