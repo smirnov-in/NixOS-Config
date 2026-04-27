@@ -11,7 +11,7 @@ in {
     enable = true;
     enableDefaultConfig = false;
 
-    matchBlocks."*" = {
+    settings."*" = {
       userKnownHostsFile = "${config.home.homeDirectory}/.ssh/known_hosts.d/hosts";
       controlMaster = "auto";
       controlPath = "${config.home.homeDirectory}/.ssh/sockets/S.%r@%h:%p";
