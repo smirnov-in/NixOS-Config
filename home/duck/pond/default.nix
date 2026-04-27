@@ -13,7 +13,6 @@
     ../common/optional/steam.nix
     ../common/optional/telegram.nix
     ../common/optional/transmission.nix
-    ../common/optional/vscode.nix
   ];
 
   home.stateVersion = "24.05";
