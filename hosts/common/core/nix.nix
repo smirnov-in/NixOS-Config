@@ -1,4 +1,14 @@
-{inputs, ...}: {
+{
+  config,
+  inputs,
+  ...
+}: {
+  sops.secrets.github-nix-token = {
+    mode = "0440";
+    owner = "root";
+    group = "nixbld";
+  };
+
   nix = {
     settings = {
       auto-optimise-store = true;
@@ -16,6 +26,8 @@
       stalled-download-timeout = 60;
       fallback = true;
     };
+
+    extraOptions = "!include ${config.sops.secrets.github-nix-token.path}";
 
     nixPath = ["nixpkgs=${inputs.nixpkgs}"];
   };
