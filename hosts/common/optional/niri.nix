@@ -5,10 +5,9 @@
 }: {
   imports = [inputs.nix-niri.nixosModules.niri];
 
-  services.displayManager.gdm = {
-    enable = true;
-    wayland = true;
-  };
+  # services.displayManager.gdm = {
+  #   enable = true;
+  # };
 
   programs.niri = {
     enable = true;
