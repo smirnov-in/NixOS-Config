@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   lib,
   options,
@@ -6,6 +7,8 @@
 }: {
   programs.firefox = {
     enable = true;
+
+    configPath = ".mozilla/firefox";
 
     policies = {
       AppAutoUpdate = false;
