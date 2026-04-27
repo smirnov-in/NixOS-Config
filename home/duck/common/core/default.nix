@@ -26,7 +26,7 @@
     sessionVariables = {
       FLAKE = "$HOME/Projects/NixOS-Config";
       NH_FLAKE = "$HOME/Projects/NixOS-Config";
-      TERMINAL = "kitty";
+      TERMINAL = "ghostty";
       VISUAL = "hx";
       EDITOR = "hx";
     };

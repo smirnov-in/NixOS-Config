@@ -3,7 +3,7 @@
     ../common/core
 
     ../common/optional/firefox.nix
-    ../common/optional/kitty.nix
+    ../common/optional/ghostty.nix
     ../common/optional/libreoffice.nix
     ../common/optional/mpv.nix
     ../common/optional/niri.nix

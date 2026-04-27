@@ -5,7 +5,7 @@
     ../common/optional/firefox.nix
     ../common/optional/flatpak.nix
     ../common/optional/impermanence.nix
-    ../common/optional/kitty.nix
+    ../common/optional/ghostty.nix
     ../common/optional/libreoffice.nix
     ../common/optional/mpv.nix
     ../common/optional/nix-index.nix

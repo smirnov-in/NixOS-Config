@@ -97,7 +97,7 @@ in {
       "Mod+Shift+Slash".action = show-hotkey-overlay;
       "Mod+Shift+E".action = quit;
 
-      "Mod+T".action.spawn = "kitty";
+      "Mod+T".action.spawn = "ghostty";
       "Mod+B".action.spawn = "firefox";
 
       "Mod+H".action = focus-column-left;
