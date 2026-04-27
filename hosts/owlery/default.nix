@@ -6,6 +6,7 @@
 
     ../common/optional/amnezia.nix
     ../common/optional/fingerprint.nix
+    ../common/optional/localsend.nix
     ../common/optional/niri.nix
     ../common/optional/printing.nix
     ../common/optional/transmission.nix
