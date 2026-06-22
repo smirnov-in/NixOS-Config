@@ -3,20 +3,22 @@
   inputs,
   pkgs,
   ...
-}: let
-  noctalia = cmd:
+}:
+let
+  noctalia =
+    cmd:
     [
-      "noctalia-shell"
-      "ipc"
-      "call"
+      "noctalia"
+      "msg"
     ]
     ++ (pkgs.lib.splitString " " cmd);
-in {
-  imports = [inputs.noctalia.homeModules.default];
+in
+{
+  imports = [ inputs.noctalia.homeModules.default ];
   programs.niri.settings = {
     spawn-at-startup = [
       {
-        command = ["noctalia-shell"];
+        command = [ "noctalia" ];
       }
     ];
     input = {
@@ -86,13 +88,13 @@ in {
 
     layer-rules = [
       {
-        matches = [{namespace = "^noctalia-overview*";}];
+        matches = [ { namespace = "^noctalia-overview*"; } ];
         place-within-backdrop = true;
       }
     ];
 
     debug = {
-      honor-xdg-activation-with-invalid-serial = [];
+      honor-xdg-activation-with-invalid-serial = [ ];
     };
 
     binds = with config.lib.niri.actions; {
@@ -152,23 +154,23 @@ in {
       "Mod+Shift+G".action = switch-focus-between-floating-and-tiling;
       "Mod+Q".action = close-window;
 
-      "Mod+D".action.spawn = noctalia "launcher toggle";
+      "Mod+D".action.spawn = noctalia "panel-toggle launcher";
 
-      "XF86AudioLowerVolume".action.spawn = noctalia "volume decrease";
-      "XF86AudioRaiseVolume".action.spawn = noctalia "volume increase";
-      "XF86AudioMicMute".action.spawn = noctalia "volume muteInput";
+      "XF86AudioMute".action.spawn = noctalia "volume-mute";
+      "XF86AudioLowerVolume".action.spawn = noctalia "volume-down";
+      "XF86AudioRaiseVolume".action.spawn = noctalia "volume-up";
+      "XF86AudioMicMute".action.spawn = noctalia "mic-mute";
 
-      "XF86AudioMute".action.spawn = noctalia "volume muteOutput";
-      "XF86MonBrightnessDown".action.spawn = noctalia "brightness decrease";
-      "XF86MonBrightnessUp".action.spawn = noctalia "brightness increase";
+      "XF86MonBrightnessDown".action.spawn = noctalia "brightness-down";
+      "XF86MonBrightnessUp".action.spawn = noctalia "brightness-up";
 
-      "Print".action.screenshot = {};
-      "Mod+Print".action.screenshot-screen = {};
-      "Shift+Print".action.screenshot-window = {};
+      "Print".action.screenshot = { };
+      "Mod+Print".action.screenshot-screen = { };
+      "Shift+Print".action.screenshot-window = { };
     };
   };
 
-  programs.noctalia-shell = {
+  programs.noctalia = {
     enable = true;
   };
 }
