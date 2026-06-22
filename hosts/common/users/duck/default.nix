@@ -4,12 +4,11 @@
   pkgs,
   inputs,
   ...
-}: let
-  rootPath =
-    if config.environment ? "persistence"
-    then "/persist"
-    else "";
-in {
+}:
+let
+  rootPath = if config.environment ? "persistence" then "/persist" else "";
+in
+{
   imports = [
     inputs.home-manager.nixosModules.default
   ];
@@ -30,8 +29,15 @@ in {
     users.duck = {
       isNormalUser = true;
       hashedPasswordFile = config.sops.secrets.duck-password.path;
-      extraGroups = ["networkmanager" "transmission" "wheel"];
-      openssh.authorizedKeys.keyFiles = [./keys/id_pike.pub];
+      extraGroups = [
+        "networkmanager"
+        "transmission"
+        "wheel"
+      ];
+      openssh.authorizedKeys.keyFiles = [
+        ./keys/id_karp.pub
+        ./keys/id_pike.pub
+      ];
     };
   };
 
@@ -39,7 +45,7 @@ in {
 
   home-manager = {
     useGlobalPkgs = true;
-    extraSpecialArgs = {inherit inputs configLib;};
+    extraSpecialArgs = { inherit inputs configLib; };
 
     users = {
       "duck" = import ../../../../home/duck/${config.networking.hostName};
