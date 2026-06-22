@@ -57,20 +57,38 @@
     };
   };
 
-  outputs = {
-    nixpkgs,
-    home-manager,
-    ...
-  } @ inputs: let
-    inherit (nixpkgs) lib;
-    configLib = import ./lib {inherit lib;};
-  in {
-    nixosConfigurations = {
-      pond = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs configLib;};
-        modules = [
-          ./hosts/pond
-        ];
+  outputs =
+    {
+      nixpkgs,
+      home-manager,
+      ...
+    }@inputs:
+    let
+      inherit (nixpkgs) lib;
+      configLib = import ./lib { inherit lib; };
+    in
+    {
+      nixosConfigurations = {
+        pond = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs configLib; };
+          modules = [
+            ./hosts/pond
+          ];
+        };
+
+        owlery = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs configLib; };
+          modules = [
+            ./hosts/owlery
+          ];
+        };
+
+        nest = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs configLib; };
+          modules = [
+            ./hosts/nest
+          ];
+        };
       };
 
       owlery = nixpkgs.lib.nixosSystem {
