@@ -2,12 +2,11 @@
   config,
   pkgs,
   ...
-}: let
-  rootPath =
-    if config.environment ? "persistence"
-    then "/persist"
-    else "";
-in {
+}:
+let
+  rootPath = if config.environment ? "persistence" then "/persist" else "";
+in
+{
   environment.systemPackages = with pkgs; [
     yubioath-flutter
     yubikey-manager
@@ -15,7 +14,7 @@ in {
   ];
 
   services.pcscd.enable = true;
-  services.udev.packages = [pkgs.yubikey-personalization];
+  services.udev.packages = [ pkgs.yubikey-personalization ];
 
   services.yubikey-agent.enable = true;
 

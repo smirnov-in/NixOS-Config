@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   programs.git = {
     enable = true;
 
@@ -8,5 +8,5 @@
     };
   };
 
-  home.packages = with pkgs; [jujutsu];
+  home.packages = with pkgs; [ jujutsu ];
 }

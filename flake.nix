@@ -91,20 +91,12 @@
         };
       };
 
-      owlery = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs configLib;};
+      homeConfigurations."duck@pond" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages."x86_64-linux";
+        extraSpecialArgs = { inherit inputs configLib; };
         modules = [
-          ./hosts/owlery
+          ./home/duck/pond
         ];
       };
     };
-
-    homeConfigurations."duck@pond" = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages."x86_64-linux";
-      extraSpecialArgs = {inherit inputs configLib;};
-      modules = [
-        ./home/duck/pond
-      ];
-    };
-  };
 }

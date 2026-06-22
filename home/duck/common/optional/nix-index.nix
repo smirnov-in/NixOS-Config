@@ -2,7 +2,8 @@
   lib,
   options,
   ...
-}: {
+}:
+{
   programs.nix-index = {
     enable = true;
   };

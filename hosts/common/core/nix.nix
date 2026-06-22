@@ -2,7 +2,8 @@
   config,
   inputs,
   ...
-}: {
+}:
+{
   sops.secrets.github-nix-token = {
     mode = "0440";
     owner = "root";
@@ -29,7 +30,7 @@
 
     extraOptions = "!include ${config.sops.secrets.github-nix-token.path}";
 
-    nixPath = ["nixpkgs=${inputs.nixpkgs}"];
+    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   };
 
   nixpkgs.config = {

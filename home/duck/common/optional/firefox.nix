@@ -4,7 +4,8 @@
   lib,
   options,
   ...
-}: {
+}:
+{
   programs.firefox = {
     enable = true;
 

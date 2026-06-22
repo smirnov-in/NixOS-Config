@@ -1,6 +1,6 @@
-{pkgs, ...}:
+{ pkgs, ... }:
 {
-	home.packages = with pkgs; [
-		openconnect
-	];
+  home.packages = with pkgs; [
+    openconnect
+  ];
 }

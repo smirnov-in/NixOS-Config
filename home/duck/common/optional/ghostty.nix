@@ -4,7 +4,11 @@
 
     settings = {
       # font-family = "JetBrainsMono Nerd Font";
-      font-feature = ["calt" "liga" "dlig"];
+      font-feature = [
+        "calt"
+        "liga"
+        "dlig"
+      ];
     };
   };
 }

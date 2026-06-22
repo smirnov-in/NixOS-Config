@@ -2,7 +2,8 @@
   lib,
   options,
   ...
-}: {
+}:
+{
   programs.atuin = {
     enable = true;
 

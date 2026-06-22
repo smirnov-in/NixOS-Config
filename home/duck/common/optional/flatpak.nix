@@ -4,7 +4,8 @@
   options,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     inputs.nix-flatpak.homeManagerModules.nix-flatpak
   ];
@@ -20,18 +21,17 @@
     };
   };
 
-  home =
-    {
-      packages = with pkgs; [flatpak];
-    }
-    // lib.optionalAttrs (options.home ? "persistence") {
-      persistence = {
-        "/persist" = {
-          directories = [
-            ".local/share/flatpak"
-            ".var/app"
-          ];
-        };
+  home = {
+    packages = with pkgs; [ flatpak ];
+  }
+  // lib.optionalAttrs (options.home ? "persistence") {
+    persistence = {
+      "/persist" = {
+        directories = [
+          ".local/share/flatpak"
+          ".var/app"
+        ];
       };
     };
+  };
 }

@@ -4,7 +4,8 @@
   pkgs,
   modulesPath,
   ...
-}: {
+}:
+{
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
@@ -16,13 +17,24 @@
     };
 
     kernelPackages = pkgs.linuxPackages_latest;
-    kernelModules = ["kvm-amd"];
-    extraModulePackages = [];
-    kernelParams = ["amdgpu.dcdebugmask=0x10" "nvidia_drm.fbdev=1"];
+    kernelModules = [ "kvm-amd" ];
+    extraModulePackages = [ ];
+    kernelParams = [
+      "amdgpu.dcdebugmask=0x10"
+      "nvidia_drm.fbdev=1"
+    ];
 
     initrd = {
-      availableKernelModules = ["nvme" "xhci_pci" "thunderbolt" "usbhid" "usb_storage" "sd_mod" "sdhci_pci"];
-      kernelModules = ["dm-snapshot"];
+      availableKernelModules = [
+        "nvme"
+        "xhci_pci"
+        "thunderbolt"
+        "usbhid"
+        "usb_storage"
+        "sd_mod"
+        "sdhci_pci"
+      ];
+      kernelModules = [ "dm-snapshot" ];
     };
   };
 

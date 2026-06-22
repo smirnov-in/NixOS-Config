@@ -4,10 +4,12 @@
   lib,
   options,
   ...
-}: let
+}:
+let
   secretsPath = toString inputs.nix-secrets;
   homeDirectory = config.home.homeDirectory;
-in {
+in
+{
   imports = [
     inputs.sops-nix.homeManagerModules.sops
   ];

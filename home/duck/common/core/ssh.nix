@@ -4,9 +4,11 @@
   lib,
   options,
   ...
-}: let
+}:
+let
   pathToKeys = configLib.relativeToRoot "hosts/common/users/${config.home.username}/keys";
-in {
+in
+{
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
@@ -21,23 +23,22 @@ in {
     };
   };
 
-  home =
-    {
-      file = {
-        ".ssh/id_pike.pub".source = "${pathToKeys}/id_pike.pub";
-        ".ssh/id_karp.pub".source = "${pathToKeys}/id_karp.pub";
-      };
-    }
-    // lib.optionalAttrs (options.home ? "persistence") {
-      persistence = {
-        "/persist" = {
-          directories = [
-            ".ssh/known_hosts.d"
-            ".ssh/sockets"
-          ];
-        };
+  home = {
+    file = {
+      ".ssh/id_pike.pub".source = "${pathToKeys}/id_pike.pub";
+      ".ssh/id_karp.pub".source = "${pathToKeys}/id_karp.pub";
+    };
+  }
+  // lib.optionalAttrs (options.home ? "persistence") {
+    persistence = {
+      "/persist" = {
+        directories = [
+          ".ssh/known_hosts.d"
+          ".ssh/sockets"
+        ];
       };
     };
+  };
 
   systemd.user.tmpfiles.rules = [
     "L ${config.home.homeDirectory}/.ssh/known_hosts - - - - ${config.home.homeDirectory}/.ssh/known_hosts.d/hosts"

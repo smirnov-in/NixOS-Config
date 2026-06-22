@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   programs.helix = {
     enable = true;
     defaultEditor = true;
@@ -17,14 +17,14 @@
     languages.language = [
       {
         name = "nix";
-        formatter.command = "alejandra";
+        formatter.command = "nixfmt";
         auto-format = true;
       }
     ];
   };
 
   home.packages = with pkgs; [
-    alejandra
+    nixfmt
     nixd
     wl-clipboard
   ];

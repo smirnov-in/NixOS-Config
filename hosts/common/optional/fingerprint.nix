@@ -2,7 +2,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   security.pam.services.sudo.fprintAuth = true;
   security.pam.services.sudo.rules.auth = {
     fprintd-only-if-lid-open = {

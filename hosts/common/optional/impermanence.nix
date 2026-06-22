@@ -2,7 +2,8 @@
   inputs,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     inputs.impermanence.nixosModules.impermanence
   ];
@@ -51,7 +52,9 @@
       #      "/etc/sudoers"
       {
         file = "/var/keys/secret_file";
-        parentDirectory = {mode = "u=rwx,g=,o=";};
+        parentDirectory = {
+          mode = "u=rwx,g=,o=";
+        };
       }
     ];
     users.duck = {
@@ -62,6 +65,6 @@
     };
   };
 
-  boot.initrd.systemd.suppressedUnits = ["systemd-machine-id-commit.service"];
-  systemd.suppressedSystemUnits = ["systemd-machine-id-commit.service"];
+  boot.initrd.systemd.suppressedUnits = [ "systemd-machine-id-commit.service" ];
+  systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
 }

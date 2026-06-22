@@ -2,7 +2,8 @@
   lib,
   options,
   ...
-}: {
+}:
+{
   programs.zoxide = {
     enable = true;
   };
