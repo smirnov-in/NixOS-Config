@@ -39,14 +39,14 @@ in {
     clipboard.disable-primary = true;
 
     outputs = {
-      "PNP(AOC) 24P1W1 UIRNAHA017694" = {
+      "PNP(AOC) 24P1W1 UIRP1HA000231" = {
         position = {
           x = 0;
           y = 0;
         };
       };
 
-      "PNP(AOC) 24P1W1 GRJK9HA094717" = {
+      "PNP(AOC) 24P1W1 RJWNBHA000278" = {
         position = {
           x = 1920;
           y = 0;
