@@ -106,6 +106,7 @@
       devShells.${system}.default = pkgs.mkShell {
         packages = with pkgs; [
           codex
+          mcp-nixos
           nixfmt-tree
         ];
       };
