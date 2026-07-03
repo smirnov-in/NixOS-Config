@@ -66,6 +66,10 @@
     let
       inherit (nixpkgs) lib;
       configLib = import ./lib { inherit lib; };
+      system = "x86_64-linux";
+      pkgs = import nixpkgs {
+        inherit system;
+      };
     in
     {
       nixosConfigurations = {
@@ -96,6 +100,13 @@
         extraSpecialArgs = { inherit inputs configLib; };
         modules = [
           ./home/duck/pond
+        ];
+      };
+
+      devShells.${system}.default = pkgs.mkShell {
+        packages = with pkgs; [
+          codex
+          nixfmt-tree
         ];
       };
     };
