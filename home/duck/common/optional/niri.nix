@@ -14,7 +14,10 @@ let
     ++ (pkgs.lib.splitString " " cmd);
 in
 {
-  imports = [ inputs.noctalia.homeModules.default ];
+  imports = [
+    inputs.noctalia.homeModules.default
+  ];
+
   programs.niri.settings = {
     spawn-at-startup = [
       {

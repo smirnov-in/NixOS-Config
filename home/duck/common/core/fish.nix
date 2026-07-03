@@ -17,7 +17,6 @@
         files = [
           {
             file = ".local/share/fish/fish_history";
-            method = "symlink";
           }
         ];
       };

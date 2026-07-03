@@ -99,6 +99,7 @@
         pkgs = nixpkgs.legacyPackages."x86_64-linux";
         extraSpecialArgs = { inherit inputs configLib; };
         modules = [
+          inputs.nix-niri.homeModules.niri
           ./home/duck/pond
         ];
       };

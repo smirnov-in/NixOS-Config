@@ -1,6 +1,7 @@
 {
   inputs,
   lib,
+  pkgs,
   ...
 }:
 {
@@ -8,9 +9,22 @@
     inputs.impermanence.nixosModules.impermanence
   ];
 
-  boot.initrd.postDeviceCommands = lib.mkAfter ''
-    mkdir /btrfs_tmp
-    mount /dev/root_vg/root /btrfs_tmp
+  boot.initrd.systemd.services.rollback-root = {
+    description = "Rollback ephemeral btrfs root subvolume";
+    wantedBy = [ "initrd.target" ];
+    after = [ "systemd-udev-settle.service" ];
+    before = [ "sysroot.mount" ];
+    unitConfig.DefaultDependencies = false;
+    serviceConfig.Type = "oneshot";
+    path = with pkgs; [
+      btrfs-progs
+      coreutils
+      findutils
+      util-linux
+    ];
+    script = ''
+      mkdir /btrfs_tmp
+      mount /dev/root_vg/root /btrfs_tmp
       if [[ -e /btrfs_tmp/root ]]; then
           mkdir -p /btrfs_tmp/old_roots
           timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+%Y-%m-%-d_%H:%M:%S")
@@ -31,7 +45,8 @@
 
       btrfs subvolume create /btrfs_tmp/root
       umount /btrfs_tmp
-  '';
+    '';
+  };
 
   fileSystems."/persist".neededForBoot = true;
   environment.persistence."/persist" = {
@@ -57,12 +72,6 @@
         };
       }
     ];
-    users.duck = {
-      directories = [
-        ".mozilla"
-        ".config/Yubico"
-      ];
-    };
   };
 
   boot.initrd.systemd.suppressedUnits = [ "systemd-machine-id-commit.service" ];
