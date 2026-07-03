@@ -63,12 +63,15 @@
     };
   };
 
-  home = lib.optionalAttrs (options.home ? "persistence") {
+  home = {
+    file."${config.programs.firefox.configPath}/profiles.ini".force = true;
+  }
+  // lib.optionalAttrs (options.home ? "persistence") {
     persistence = {
       "/persist" = {
-        # directories = [
-        #   ".mozilla/firefox"
-        # ];
+        directories = [
+          ".mozilla/firefox"
+        ];
       };
     };
   };
