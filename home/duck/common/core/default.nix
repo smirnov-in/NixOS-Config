@@ -23,11 +23,8 @@
     homeDirectory = "/home/${config.home.username}";
 
     sessionVariables = {
-      FLAKE = "$HOME/Projects/NixOS-Config";
-      NH_FLAKE = "$HOME/Projects/NixOS-Config";
-      TERMINAL = "ghostty";
-      VISUAL = "hx";
-      EDITOR = "hx";
+      FLAKE = "${config.home.homeDirectory}/Projects/NixOS-Config";
+      NH_FLAKE = "${config.home.homeDirectory}/Projects/NixOS-Config";
     };
   };
 

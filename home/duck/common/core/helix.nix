@@ -28,4 +28,9 @@
     nixd
     wl-clipboard
   ];
+
+  home.sessionVariables = {
+    EDITOR = "hx";
+    VISUAL = "hx";
+  };
 }

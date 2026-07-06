@@ -11,4 +11,8 @@
       ];
     };
   };
+
+  home.sessionVariables = {
+    TERMINAL = "ghostty";
+  };
 }
