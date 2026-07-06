@@ -4,12 +4,12 @@
 
     ../common/core
 
-    ../common/optional/amnezia.nix
-    ../common/optional/fingerprint.nix
-    ../common/optional/localsend.nix
-    ../common/optional/niri.nix
-    ../common/optional/printing.nix
-    ../common/optional/transmission.nix
+    ../common/services/amnezia.nix
+    ../common/security/fingerprint.nix
+    ../common/services/localsend.nix
+    ../common/gui/niri.nix
+    ../common/services/printing.nix
+    ../common/services/transmission.nix
 
     ../common/users/duck
   ];

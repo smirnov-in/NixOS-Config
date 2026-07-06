@@ -4,12 +4,12 @@
 
     ../common/core
 
-    # ../common/optional/amnezia.nix
-    ../common/optional/impermanence.nix
-    ../common/optional/niri.nix
-    ../common/optional/printing.nix
-    ../common/optional/steam.nix
-    ../common/optional/yubikey.nix
+    # ../common/services/amnezia.nix
+    ../common/persistence/impermanence.nix
+    ../common/gui/niri.nix
+    ../common/services/printing.nix
+    ../common/gui/steam.nix
+    ../common/security/yubikey.nix
 
     ../common/users/duck
   ];

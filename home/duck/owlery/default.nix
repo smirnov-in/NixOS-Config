@@ -2,13 +2,13 @@
   imports = [
     ../common/core
 
-    ../common/optional/firefox.nix
-    ../common/optional/ghostty.nix
-    ../common/optional/libreoffice.nix
-    ../common/optional/mpv.nix
-    ../common/optional/niri.nix
-    ../common/optional/openconnect.nix
-    ../common/optional/telegram.nix
+    ../common/gui/firefox.nix
+    ../common/gui/ghostty.nix
+    ../common/gui/libreoffice.nix
+    ../common/gui/mpv.nix
+    ../common/gui/niri.nix
+    ../common/services/openconnect.nix
+    ../common/gui/telegram.nix
   ];
 
   home.stateVersion = "25.05";
