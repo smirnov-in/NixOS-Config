@@ -57,10 +57,8 @@
       date = "${pkgs.coreutils}/bin/date";
       find = "${pkgs.findutils}/bin/find";
       mkdir = "${pkgs.coreutils}/bin/mkdir";
-      mount = "${pkgs.util-linux}/bin/mount";
       mv = "${pkgs.coreutils}/bin/mv";
       stat = "${pkgs.coreutils}/bin/stat";
-      umount = "${pkgs.util-linux}/bin/umount";
     };
   };
 

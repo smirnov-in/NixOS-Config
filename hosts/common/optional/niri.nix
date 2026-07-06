@@ -3,6 +3,9 @@
   pkgs,
   ...
 }:
+let
+  system = pkgs.stdenv.hostPlatform.system;
+in
 {
   imports = [ inputs.nix-niri.nixosModules.niri ];
 
@@ -13,6 +16,7 @@
 
   programs.niri = {
     enable = true;
+    package = inputs.nix-niri.packages.${system}.niri-stable;
   };
 
   environment.systemPackages = with pkgs; [

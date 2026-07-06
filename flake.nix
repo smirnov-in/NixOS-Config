@@ -3,11 +3,16 @@
 
   inputs = {
     nixpkgs = {
-      url = "github:nixos/nixpkgs/nixos-unstable";
+      url = "github:NixOS/nixpkgs/nixos-26.05";
+    };
+
+    nixpkgs-unstable = {
+      url = "github:NixOS/nixpkgs/nixos-unstable";
     };
 
     nixos-hardware = {
       url = "github:nixos/nixos-hardware";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     disko = {
@@ -17,15 +22,17 @@
 
     impermanence = {
       url = "github:nix-community/impermanence";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     nix-flatpak = {
-      url = "github:gmodena/nix-flatpak/latest";
+      url = "github:gmodena/nix-flatpak/v0.7.0";
     };
 
     firefox-addons = {
@@ -45,6 +52,7 @@
 
     nix-catppuccin = {
       url = "github:catppuccin/nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     nix-niri = {
@@ -53,7 +61,6 @@
 
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -69,6 +76,10 @@
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
+      };
+      pkgsUnstable = import inputs.nixpkgs-unstable {
+        inherit system;
+        config.allowUnfree = true;
       };
     in
     {
@@ -104,8 +115,8 @@
         ];
       };
 
-      devShells.${system}.default = pkgs.mkShell {
-        packages = with pkgs; [
+      devShells.${system}.default = pkgsUnstable.mkShell {
+        packages = with pkgsUnstable; [
           codex
           mcp-nixos
           nixfmt-tree
