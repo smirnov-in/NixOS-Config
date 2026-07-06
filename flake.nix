@@ -67,7 +67,6 @@
   outputs =
     {
       nixpkgs,
-      home-manager,
       ...
     }@inputs:
     let
@@ -104,15 +103,6 @@
             ./hosts/nest
           ];
         };
-      };
-
-      homeConfigurations."duck@pond" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages."x86_64-linux";
-        extraSpecialArgs = { inherit inputs configLib; };
-        modules = [
-          inputs.nix-niri.homeModules.niri
-          ./home/duck/pond
-        ];
       };
 
       devShells.${system}.default = pkgsUnstable.mkShell {
