@@ -1,6 +1,6 @@
 {
   imports = [
-    ../common/core
+    ../common/base.nix
 
     ../common/persistence/impermanence.nix
 

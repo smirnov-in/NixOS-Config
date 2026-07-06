@@ -1,21 +1,23 @@
 { config, ... }: {
   imports = [
-    ./atuin.nix
-    ./bat.nix
-    ./btop.nix
-    ./direnv.nix
-    ./eza.nix
-    ./fd.nix
-    ./fish.nix
-    ./git.nix
-    ./helix.nix
-    ./ripgrep.nix
-    ./sops.nix
-    ./ssh.nix
-    ./starship.nix
-    ./yazi.nix
-    ./zellij.nix
-    ./zoxide.nix
+    ./cli/atuin.nix
+    ./cli/bat.nix
+    ./cli/btop.nix
+    ./cli/direnv.nix
+    ./cli/eza.nix
+    ./cli/fd.nix
+    ./cli/git.nix
+    ./cli/helix.nix
+    ./cli/ripgrep.nix
+    ./cli/starship.nix
+    ./cli/yazi.nix
+    ./cli/zellij.nix
+    ./cli/zoxide.nix
+
+    ./security/sops.nix
+    ./security/ssh.nix
+
+    ./shell/fish.nix
   ];
 
   home = {
