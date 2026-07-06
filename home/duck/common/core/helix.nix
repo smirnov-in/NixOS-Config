@@ -26,7 +26,6 @@
   home.packages = with pkgs; [
     nixfmt
     nixd
-    wl-clipboard
   ];
 
   home.sessionVariables = {

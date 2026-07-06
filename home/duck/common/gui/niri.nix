@@ -18,6 +18,10 @@ in
     inputs.noctalia.homeModules.default
   ];
 
+  home.packages = with pkgs; [
+    wl-clipboard
+  ];
+
   programs.niri.settings = {
     spawn-at-startup = [
       {
