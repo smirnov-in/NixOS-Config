@@ -3,6 +3,7 @@
     ./hardware
 
     ../common/core
+
     ../common/users/duck
   ];
 
