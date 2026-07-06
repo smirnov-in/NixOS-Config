@@ -4,6 +4,8 @@
 
     ../common/core
 
+    ../common/networking/networkmanager.nix
+
     ../common/gui/niri.nix
 
     ../common/services/amnezia.nix

@@ -33,11 +33,8 @@
 
   networking = {
     hostName = "owlery";
-    networkmanager.enable = true;
-    useDHCP = lib.mkDefault true;
   };
 
-  hardware.bluetooth.enable = true;
   services.power-profiles-daemon.enable = true;
   services.upower.enable = true;
 

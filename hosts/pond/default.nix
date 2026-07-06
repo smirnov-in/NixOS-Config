@@ -6,6 +6,8 @@
 
     ../common/persistence/impermanence.nix
 
+    ../common/networking/networkmanager.nix
+
     ../common/gui/niri.nix
     ../common/gui/steam.nix
 

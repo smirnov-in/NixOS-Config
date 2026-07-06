@@ -6,17 +6,14 @@
 {
   config = lib.mkMerge [
     {
-      services.openssh = {
-        enable = true;
-        settings = {
-          PasswordAuthentication = false;
-          PermitRootLogin = "no";
-        };
+      networking = {
+        networkmanager.enable = true;
+        useDHCP = lib.mkDefault true;
       };
     }
     (lib.optionalAttrs (options.environment ? "persistence") {
       environment.persistence."/persist".directories = [
-        "/etc/ssh"
+        "/etc/NetworkManager/system-connections"
       ];
     })
   ];
