@@ -2,6 +2,7 @@
   imports = [
     ../common/core
 
+    ../common/gui/catppuccin.nix
     ../common/gui/firefox.nix
     ../common/gui/ghostty.nix
     ../common/gui/libreoffice.nix

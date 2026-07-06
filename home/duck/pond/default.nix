@@ -6,6 +6,7 @@
 
     ../common/cli/nix-index.nix
 
+    ../common/gui/catppuccin.nix
     ../common/gui/firefox.nix
     ../common/gui/flatpak.nix
     ../common/gui/ghostty.nix
