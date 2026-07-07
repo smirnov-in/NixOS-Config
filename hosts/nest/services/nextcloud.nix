@@ -96,15 +96,31 @@ in
             archive="${backupDir}/nextcloud-''${stamp}.tar.zst"
             archive_tmp="''${archive}.tmp"
             workdir="$(${pkgs.coreutils}/bin/mktemp -d "${backupDir}/.nextcloud-backup.XXXXXX")"
+            loaded_credentials_dir="$CREDENTIALS_DIRECTORY"
+            credentials_dir="$(${pkgs.coreutils}/bin/mktemp -d /run/nextcloud-backup-credentials.XXXXXX)"
             maintenance_enabled=false
 
             cleanup() {
-              ${pkgs.coreutils}/bin/rm -rf "$workdir" "$archive_tmp"
+              ${pkgs.coreutils}/bin/rm -rf "$workdir" "$archive_tmp" "$credentials_dir"
               if [ "$maintenance_enabled" = true ]; then
                 "$occ" maintenance:mode --off || true
               fi
             }
             trap cleanup EXIT
+
+            ${pkgs.coreutils}/bin/install \
+              --directory \
+              --mode 0700 \
+              --owner nextcloud \
+              --group nextcloud \
+              "$credentials_dir"
+            ${pkgs.coreutils}/bin/install \
+              --mode 0400 \
+              --owner nextcloud \
+              --group nextcloud \
+              "$loaded_credentials_dir/secret_file" \
+              "$credentials_dir/secret_file"
+            export CREDENTIALS_DIRECTORY="$credentials_dir"
 
             "$occ" status --exit-code
             "$occ" maintenance:mode --on
