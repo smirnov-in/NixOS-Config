@@ -54,6 +54,32 @@
           nextcloud.{$NEST_DOMAIN} {
             reverse_proxy 127.0.0.1:8081
           }
+
+          dashboard.{$NEST_DOMAIN} {
+            @not_lan not remote_ip 192.168.1.0/24
+
+            handle @not_lan {
+              respond 403
+            }
+
+            handle /vault {
+              redir https://vault.{$NEST_DOMAIN}
+            }
+
+            handle /nextcloud {
+              redir https://nextcloud.{$NEST_DOMAIN}
+            }
+
+            handle /jellyfin {
+              redir https://jellyfin.{$NEST_DOMAIN}
+            }
+
+            handle {
+              reverse_proxy 127.0.0.1:8082 {
+                header_up Host localhost:8082
+              }
+            }
+          }
         '';
       };
     }
