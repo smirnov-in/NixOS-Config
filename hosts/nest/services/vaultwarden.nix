@@ -39,47 +39,33 @@ in
         };
       };
 
-      systemd.tmpfiles.rules = [
-        "d ${backupDir} 0750 root root - -"
-      ];
-
-      systemd.services.vaultwarden-backup = {
+      nest.backups.local.jobs.vaultwarden = {
         description = "Back up Vaultwarden state";
         after = [ "vaultwarden.service" ];
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = pkgs.writeShellScript "vaultwarden-backup" ''
-            set -euo pipefail
-
-            stamp="$(${pkgs.coreutils}/bin/date --utc +%Y%m%dT%H%M%SZ)"
-            archive="${backupDir}/vaultwarden-''${stamp}.tar.zst"
-
-            ${pkgs.systemd}/bin/systemctl stop vaultwarden.service
-            trap '${pkgs.systemd}/bin/systemctl start vaultwarden.service' EXIT
-
-            ${pkgs.gnutar}/bin/tar \
-              --create \
-              --directory ${dataDir} \
-              --use-compress-program '${pkgs.zstd}/bin/zstd -T0' \
-              --file "$archive" \
-              .
-
-            ${pkgs.findutils}/bin/find ${backupDir} \
-              -name 'vaultwarden-*.tar.zst' \
-              -type f \
-              -mtime +14 \
-              -delete
-          '';
-        };
-      };
-
-      systemd.timers.vaultwarden-backup = {
-        wantedBy = [ "timers.target" ];
+        inherit backupDir;
         timerConfig = {
           OnCalendar = "daily";
           Persistent = true;
           RandomizedDelaySec = "30m";
         };
+        retention = {
+          days = 14;
+          pattern = "vaultwarden-*.tar.zst";
+        };
+        script = ''
+          stamp="$(${pkgs.coreutils}/bin/date --utc +%Y%m%dT%H%M%SZ)"
+          archive="${backupDir}/vaultwarden-''${stamp}.tar.zst"
+
+          ${pkgs.systemd}/bin/systemctl stop vaultwarden.service
+          trap '${pkgs.systemd}/bin/systemctl start vaultwarden.service' EXIT
+
+          ${pkgs.gnutar}/bin/tar \
+            --create \
+            --directory ${dataDir} \
+            --use-compress-program '${pkgs.zstd}/bin/zstd -T0' \
+            --file "$archive" \
+            .
+        '';
       };
     }
     (lib.optionalAttrs (options.environment ? "persistence") {
