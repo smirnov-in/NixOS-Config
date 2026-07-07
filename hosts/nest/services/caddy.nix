@@ -34,7 +34,17 @@
           }
 
           vault.{$NEST_DOMAIN} {
-            reverse_proxy 127.0.0.1:8222
+            @admin path /admin*
+            @not_lan not remote_ip 192.168.1.0/24
+
+            handle @admin {
+              respond @not_lan 403
+              reverse_proxy 127.0.0.1:8222
+            }
+
+            handle {
+              reverse_proxy 127.0.0.1:8222
+            }
           }
         '';
       };
