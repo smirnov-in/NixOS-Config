@@ -32,6 +32,10 @@
           {$NEST_DOMAIN} {
             respond "nest is ready"
           }
+
+          vault.{$NEST_DOMAIN} {
+            reverse_proxy 127.0.0.1:8222
+          }
         '';
       };
     }
