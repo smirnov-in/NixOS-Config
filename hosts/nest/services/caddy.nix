@@ -55,6 +55,20 @@
             reverse_proxy 127.0.0.1:8081
           }
 
+          adguard.{$NEST_DOMAIN} {
+            @not_lan not remote_ip 192.168.1.0/24
+
+            handle @not_lan {
+              respond 403
+            }
+
+            handle {
+              reverse_proxy 127.0.0.1:8083 {
+                header_up Host localhost:8083
+              }
+            }
+          }
+
           dashboard.{$NEST_DOMAIN} {
             @not_lan not remote_ip 192.168.1.0/24
 
@@ -72,6 +86,10 @@
 
             handle /jellyfin {
               redir https://jellyfin.{$NEST_DOMAIN}
+            }
+
+            handle /adguard {
+              redir https://adguard.{$NEST_DOMAIN}
             }
 
             handle {

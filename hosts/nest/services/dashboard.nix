@@ -59,6 +59,12 @@
                   description = "Media";
                 };
               }
+              {
+                "AdGuard Home" = {
+                  href = "/adguard";
+                  description = "DNS";
+                };
+              }
             ];
           }
         ];

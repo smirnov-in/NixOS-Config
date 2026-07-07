@@ -10,6 +10,8 @@
     };
   };
 
+  services.resolved.settings.Resolve.DNSStubListener = "no";
+
   systemd.network = {
     enable = true;
 
