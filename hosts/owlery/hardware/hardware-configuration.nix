@@ -35,23 +35,6 @@
     hostName = "owlery";
   };
 
-  services.power-profiles-daemon.enable = true;
-  services.upower.enable = true;
-
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-
-  # hardware.openrazer = {
-  #   enable = true;
-  #   users = ["duck"];
-  # };
-
-  services.fprintd = {
-    enable = true;
-    package = pkgs.fprintd-tod;
-    tod = {
-      enable = true;
-      driver = pkgs.libfprint-2-tod1-goodix;
-    };
-  };
 }

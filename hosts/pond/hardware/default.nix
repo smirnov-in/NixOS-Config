@@ -9,6 +9,7 @@
     ./hardware-configuration.nix
 
     ../../common/hardware/bluetooth.nix
+    ../../common/hardware/laptop-power.nix
 
     inputs.disko.nixosModules.default
     (import ./disko.nix { device = "/dev/nvme0n1"; })

@@ -41,9 +41,6 @@
     hostName = "pond";
   };
 
-  services.power-profiles-daemon.enable = true;
-  services.upower.enable = true;
-
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
