@@ -6,8 +6,6 @@
 
     ../common/base.nix
 
-    ../common/networking/networkmanager.nix
-
     ../common/users/duck
   ];
 
