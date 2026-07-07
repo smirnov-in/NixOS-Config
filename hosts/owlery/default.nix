@@ -7,11 +7,11 @@
     ../common/networking/networkmanager.nix
 
     ../common/gui/catppuccin.nix
+    ../common/gui/localsend.nix
     ../common/gui/niri.nix
     ../common/gui/plymouth.nix
 
     ../common/services/amnezia.nix
-    ../common/services/localsend.nix
     ../common/services/printing.nix
     ../common/services/transmission.nix
 
