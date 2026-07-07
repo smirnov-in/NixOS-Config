@@ -50,6 +50,10 @@
           jellyfin.{$NEST_DOMAIN} {
             reverse_proxy 127.0.0.1:8096
           }
+
+          nextcloud.{$NEST_DOMAIN} {
+            reverse_proxy 127.0.0.1:8081
+          }
         '';
       };
     }
