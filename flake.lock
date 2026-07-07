@@ -126,11 +126,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783356436,
-        "narHash": "sha256-eUh4pdoI5pnMLV+sncuThErQ71Bs3S5fdo/my3SUf1A=",
+        "lastModified": 1783412608,
+        "narHash": "sha256-L+XNOGLSeqlW0Z5/PGcKAujY8XeeZY8fVPVFx+wJFXo=",
         "owner": "catppuccin",
         "repo": "nix",
-        "rev": "cf1750da1bdabcd549d2476f387d39e90bb20228",
+        "rev": "f5563bfd49ed29d56c3a3e09989031b2eab7299d",
         "type": "github"
       },
       "original": {
@@ -181,10 +181,10 @@
     "nix-secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1783015523,
-        "narHash": "sha256-r3JJqh33H6LJZRSctJnWUvHoGVExxdiVXXww/gVrh88=",
+        "lastModified": 1783420643,
+        "narHash": "sha256-fI9d4EhSLVoM6SuojFQIgBMVgflf39lG/ASA7xztgZA=",
         "ref": "main",
-        "rev": "50e95282e7e822b67f4b7e68b7d0cabaf872516c",
+        "rev": "0286a13f59fe6bb37478da655eea58f8ad7ff27b",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/smirnov-in/NixOS-Secrets.git"
