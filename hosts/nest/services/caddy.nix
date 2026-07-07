@@ -24,12 +24,9 @@
 
       services.caddy = {
         enable = true;
+        email = "{$ACME_EMAIL}";
         environmentFile = config.sops.templates."caddy.env".path;
         openFirewall = true;
-
-        globalConfig = ''
-          email {$ACME_EMAIL}
-        '';
 
         extraConfig = ''
           {$NEST_DOMAIN} {
