@@ -9,6 +9,8 @@
       services.openssh = {
         enable = true;
         settings = {
+          AllowUsers = [ "duck" ];
+          KbdInteractiveAuthentication = false;
           PasswordAuthentication = false;
           PermitRootLogin = "no";
         };

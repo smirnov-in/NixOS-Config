@@ -16,7 +16,7 @@ in
     settings."*" = {
       userKnownHostsFile = "${config.home.homeDirectory}/.ssh/known_hosts.d/hosts";
       controlMaster = "auto";
-      controlPath = "${config.home.homeDirectory}/.ssh/sockets/S.%r@%h:%p";
+      controlPath = "${config.home.homeDirectory}/.ssh/sockets/%C";
       controlPersist = "10m";
 
       addKeysToAgent = "yes";
@@ -34,13 +34,14 @@ in
       "/persist" = {
         directories = [
           ".ssh/known_hosts.d"
-          ".ssh/sockets"
         ];
       };
     };
   };
 
   systemd.user.tmpfiles.rules = [
+    "d ${config.home.homeDirectory}/.ssh 0700 - - - -"
+    "d ${config.home.homeDirectory}/.ssh/sockets 0700 - - - -"
     "L ${config.home.homeDirectory}/.ssh/known_hosts - - - - ${config.home.homeDirectory}/.ssh/known_hosts.d/hosts"
   ];
 }
