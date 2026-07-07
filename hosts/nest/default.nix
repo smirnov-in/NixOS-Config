@@ -1,6 +1,8 @@
 {
   imports = [
     ./hardware
+    ./networking.nix
+    ./services
 
     ../common/base.nix
 
