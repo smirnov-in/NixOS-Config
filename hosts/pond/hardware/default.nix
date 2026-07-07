@@ -1,6 +1,5 @@
 {
   inputs,
-  config,
   lib,
   options,
   ...
@@ -18,14 +17,9 @@
     inputs.nixos-hardware.nixosModules.asus-zephyrus-ga402x-nvidia
   ];
 
-  config = lib.mkMerge [
-    {
-      hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.beta;
-    }
-    (lib.optionalAttrs (options.environment ? "persistence") {
-      environment.persistence."/persist".directories = [
-        "/etc/asusd"
-      ];
-    })
-  ];
+  config = lib.optionalAttrs (options.environment ? "persistence") {
+    environment.persistence."/persist".directories = [
+      "/etc/asusd"
+    ];
+  };
 }
