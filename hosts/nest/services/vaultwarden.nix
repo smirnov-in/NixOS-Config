@@ -6,7 +6,7 @@
   ...
 }:
 let
-  dataDir = "/var/lib/bitwarden_rs";
+  dataDir = "/var/lib/vaultwarden";
   backupDir = "/srv/backups/vaultwarden";
 in
 {
@@ -84,7 +84,7 @@ in
     }
     (lib.optionalAttrs (options.environment ? "persistence") {
       environment.persistence."/persist".directories = [
-        "/var/lib/bitwarden_rs"
+        "/var/lib/vaultwarden"
       ];
     })
   ];
