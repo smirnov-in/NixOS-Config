@@ -3,6 +3,7 @@
     ./hardware
     ./networking.nix
     ./services
+    ./storage.nix
 
     ../common/base.nix
 
