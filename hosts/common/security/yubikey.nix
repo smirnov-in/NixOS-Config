@@ -1,11 +1,12 @@
 {
   config,
   lib,
+  options,
   pkgs,
   ...
 }:
 let
-  rootPath = if config.environment ? "persistence" then "/persist" else "";
+  rootPath = if options.environment ? "persistence" then "/persist" else "";
 in
 {
   sops.secrets."yubico/u2f_keys" = {
@@ -21,7 +22,7 @@ in
       pam_u2f
     ];
   }
-  // lib.optionalAttrs (config.environment ? "persistence") {
+  // lib.optionalAttrs (options.environment ? "persistence") {
     persistence."/persist".users.duck.directories = [
       ".config/Yubico"
     ];
@@ -44,9 +45,9 @@ in
     };
 
     services = {
-      login.u2fAuth = true;
+      login.u2f.enable = true;
       sudo = {
-        u2fAuth = true;
+        u2f.enable = true;
         sshAgentAuth = true;
       };
     };
