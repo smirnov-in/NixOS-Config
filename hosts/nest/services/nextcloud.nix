@@ -73,7 +73,7 @@ in
       };
 
       systemd.tmpfiles.rules = [
-        "d ${backupDir} 0750 nextcloud nextcloud - -"
+        "d ${backupDir} 0750 root root - -"
       ];
 
       systemd.services.nextcloud-backup = {
@@ -84,8 +84,6 @@ in
         ];
         serviceConfig = {
           Type = "oneshot";
-          User = "nextcloud";
-          Group = "nextcloud";
           LoadCredential = [
             "secret_file:${config.sops.templates."nextcloud-secrets.json".path}"
           ];
@@ -112,7 +110,8 @@ in
             "$occ" maintenance:mode --on
             maintenance_enabled=true
 
-            ${config.services.postgresql.package}/bin/pg_dump \
+            ${pkgs.util-linux}/bin/runuser --user ${dbUser} -- \
+              ${config.services.postgresql.package}/bin/pg_dump \
               --host=/run/postgresql \
               --username=${dbUser} \
               --dbname=${dbName} \
