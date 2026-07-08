@@ -2,8 +2,13 @@
   config,
   lib,
   options,
+  pkgs,
   ...
 }:
+let
+  stateDir = "/var/lib/AdGuardHome";
+  backupDir = "/srv/backups/adguard-home";
+in
 {
   config = lib.mkMerge [
     {
@@ -67,10 +72,48 @@
         allowedTCPPorts = [ 53 ];
         allowedUDPPorts = [ 53 ];
       };
+
+      nest.backups.local.jobs.adguard-home = {
+        description = "Back up AdGuard Home state";
+        after = [ "adguardhome.service" ];
+        wants = [ "adguardhome.service" ];
+        inherit backupDir;
+        timerConfig = {
+          OnCalendar = "daily";
+          Persistent = true;
+          RandomizedDelaySec = "30m";
+        };
+        retention = {
+          days = 14;
+          pattern = "adguard-home-*.tar.zst";
+        };
+        script = ''
+          umask 0077
+
+          stamp="$(${pkgs.coreutils}/bin/date --utc +%Y%m%dT%H%M%SZ)"
+          archive="${backupDir}/adguard-home-''${stamp}.tar.zst"
+          archive_tmp="''${archive}.tmp"
+
+          cleanup() {
+            ${pkgs.coreutils}/bin/rm -f "$archive_tmp"
+          }
+          trap cleanup EXIT
+
+          ${pkgs.gnutar}/bin/tar \
+            --create \
+            --directory ${stateDir} \
+            --use-compress-program '${pkgs.zstd}/bin/zstd -T0' \
+            --file "$archive_tmp" \
+            .
+
+          ${pkgs.coreutils}/bin/mv "$archive_tmp" "$archive"
+        '';
+      };
     }
     (lib.optionalAttrs (options.environment ? "persistence") {
       environment.persistence."/persist".directories = [
-        "/var/lib/AdGuardHome"
+        backupDir
+        stateDir
       ];
     })
   ];
