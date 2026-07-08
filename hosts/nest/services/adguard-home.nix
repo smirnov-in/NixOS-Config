@@ -7,6 +7,7 @@
 }:
 let
   stateDir = "/var/lib/AdGuardHome";
+  persistedStateDir = "/var/lib/private/AdGuardHome";
   backupDir = "/srv/backups/adguard-home";
 in
 {
@@ -113,7 +114,7 @@ in
     (lib.optionalAttrs (options.environment ? "persistence") {
       environment.persistence."/persist".directories = [
         backupDir
-        stateDir
+        persistedStateDir
       ];
     })
   ];
