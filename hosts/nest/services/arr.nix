@@ -7,13 +7,19 @@
 }:
 let
   backupDir = "/srv/backups/arr";
-  torrentPort = 51413;
   arrStateDirs = [
     "/var/lib/bazarr"
     "/var/lib/private/prowlarr"
     "/var/lib/qbittorrent"
     "/var/lib/radarr"
     "/var/lib/sonarr"
+  ];
+  arrServices = [
+    "bazarr"
+    "prowlarr"
+    "qbittorrent"
+    "radarr"
+    "sonarr"
   ];
 in
 {
@@ -24,7 +30,7 @@ in
         group = "media";
         profileDir = "/var/lib/qbittorrent";
         webuiPort = 8080;
-        torrentingPort = torrentPort;
+        torrentingPort = 51413;
         openFirewall = false;
         extraArgs = [ "--confirm-legal-notice" ];
       };
@@ -55,6 +61,8 @@ in
         sonarr.extraGroups = [ "media" ];
       };
 
+      duck.vpn.amnezia.instances.amnezia.services = arrServices;
+
       systemd.services = {
         bazarr.serviceConfig.ReadWritePaths = [
           "/srv/downloads"
@@ -69,11 +77,6 @@ in
           "/srv/downloads"
           "/srv/media"
         ];
-      };
-
-      networking.firewall = {
-        allowedTCPPorts = [ torrentPort ];
-        allowedUDPPorts = [ torrentPort ];
       };
 
       nest.backups.local.jobs.arr = {
@@ -101,7 +104,7 @@ in
           stamp="$(${pkgs.coreutils}/bin/date --utc +%Y%m%dT%H%M%SZ)"
           archive="${backupDir}/arr-''${stamp}.tar.zst"
           archive_tmp="''${archive}.tmp"
-          services=(bazarr prowlarr qbittorrent radarr sonarr)
+          services=(${lib.concatStringsSep " " arrServices})
           active_services=()
 
           cleanup() {

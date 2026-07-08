@@ -4,6 +4,7 @@
     ./networking.nix
     ./services
     ./storage.nix
+    ./vpn/amnezia.nix
 
     ../common/base.nix
 

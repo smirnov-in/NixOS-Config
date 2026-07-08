@@ -4,6 +4,9 @@
   options,
   ...
 }:
+let
+  amneziaAddress = config.duck.vpn.amnezia.instances.amnezia.namespaceAddress;
+in
 {
   config = lib.mkMerge [
     {
@@ -69,27 +72,27 @@
 
           qbit.{$NEST_DOMAIN} {
             import lan_only
-            reverse_proxy 127.0.0.1:8080
+            reverse_proxy ${amneziaAddress}:8080
           }
 
           prowlarr.{$NEST_DOMAIN} {
             import lan_only
-            reverse_proxy 127.0.0.1:9696
+            reverse_proxy ${amneziaAddress}:9696
           }
 
           sonarr.{$NEST_DOMAIN} {
             import lan_only
-            reverse_proxy 127.0.0.1:8989
+            reverse_proxy ${amneziaAddress}:8989
           }
 
           radarr.{$NEST_DOMAIN} {
             import lan_only
-            reverse_proxy 127.0.0.1:7878
+            reverse_proxy ${amneziaAddress}:7878
           }
 
           bazarr.{$NEST_DOMAIN} {
             import lan_only
-            reverse_proxy 127.0.0.1:6767
+            reverse_proxy ${amneziaAddress}:6767
           }
 
           dashboard.{$NEST_DOMAIN} {
