@@ -1,6 +1,6 @@
 {
   imports = [
-    ./adguard-home.nix
+    ./blocky.nix
     ./backups.nix
     ./caddy.nix
     ./dashboard.nix
