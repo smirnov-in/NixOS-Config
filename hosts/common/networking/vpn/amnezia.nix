@@ -9,8 +9,9 @@ let
 
   enabledInstances = lib.filterAttrs (_: instance: instance.enable) cfg.instances;
 
-  mkHostInterface = name: "veth-${name}-host";
-  mkNamespaceInterface = name: "veth-${name}-netns";
+  mkInterfaceSuffix = name: builtins.substring 0 8 (builtins.hashString "sha256" name);
+  mkHostInterface = name: "vpn-${mkInterfaceSuffix name}-h";
+  mkNamespaceInterface = name: "vpn-${mkInterfaceSuffix name}-n";
   mkResolvConf = name: "/etc/netns/${name}/resolv.conf";
   mkRuntimeConfig = name: "/run/duck-vpn/amnezia/${name}.conf";
 
