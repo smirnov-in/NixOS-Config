@@ -59,6 +59,12 @@
                   description = "Media";
                 };
               }
+              {
+                Immich = {
+                  href = "/immich";
+                  description = "Photos";
+                };
+              }
             ];
           }
         ];

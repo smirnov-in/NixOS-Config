@@ -159,7 +159,6 @@ in
       environment.persistence."/persist".directories = [
         "/srv/backups/nextcloud"
         "/srv/nextcloud"
-        "/var/lib/postgresql"
       ];
     })
   ];

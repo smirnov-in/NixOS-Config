@@ -51,6 +51,10 @@
             reverse_proxy 127.0.0.1:8096
           }
 
+          immich.{$NEST_DOMAIN} {
+            reverse_proxy 127.0.0.1:2283
+          }
+
           nextcloud.{$NEST_DOMAIN} {
             reverse_proxy 127.0.0.1:8081
           }
@@ -72,6 +76,10 @@
 
             handle /jellyfin {
               redir https://jellyfin.{$NEST_DOMAIN}
+            }
+
+            handle /immich {
+              redir https://immich.{$NEST_DOMAIN}
             }
 
             handle {
