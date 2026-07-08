@@ -181,6 +181,10 @@ in
       }
     ];
 
+    boot.kernelModules = [ "amneziawg" ];
+
+    environment.systemPackages = [ pkgs.amneziawg-tools ];
+
     networking.nat = {
       enable = true;
       externalInterface = (lib.head (lib.attrValues enabledInstances)).externalInterface;
