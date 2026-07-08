@@ -29,6 +29,14 @@
         openFirewall = true;
 
         extraConfig = ''
+          (lan_only) {
+            @not_lan not remote_ip 192.168.1.0/24
+
+            handle @not_lan {
+              respond 403
+            }
+          }
+
           {$NEST_DOMAIN} {
             respond "nest is ready"
           }
@@ -59,12 +67,33 @@
             reverse_proxy 127.0.0.1:8081
           }
 
-          dashboard.{$NEST_DOMAIN} {
-            @not_lan not remote_ip 192.168.1.0/24
+          qbit.{$NEST_DOMAIN} {
+            import lan_only
+            reverse_proxy 127.0.0.1:8080
+          }
 
-            handle @not_lan {
-              respond 403
-            }
+          prowlarr.{$NEST_DOMAIN} {
+            import lan_only
+            reverse_proxy 127.0.0.1:9696
+          }
+
+          sonarr.{$NEST_DOMAIN} {
+            import lan_only
+            reverse_proxy 127.0.0.1:8989
+          }
+
+          radarr.{$NEST_DOMAIN} {
+            import lan_only
+            reverse_proxy 127.0.0.1:7878
+          }
+
+          bazarr.{$NEST_DOMAIN} {
+            import lan_only
+            reverse_proxy 127.0.0.1:6767
+          }
+
+          dashboard.{$NEST_DOMAIN} {
+            import lan_only
 
             handle /vault {
               redir https://vault.{$NEST_DOMAIN}
@@ -80,6 +109,26 @@
 
             handle /immich {
               redir https://immich.{$NEST_DOMAIN}
+            }
+
+            handle /qbit {
+              redir https://qbit.{$NEST_DOMAIN}
+            }
+
+            handle /prowlarr {
+              redir https://prowlarr.{$NEST_DOMAIN}
+            }
+
+            handle /sonarr {
+              redir https://sonarr.{$NEST_DOMAIN}
+            }
+
+            handle /radarr {
+              redir https://radarr.{$NEST_DOMAIN}
+            }
+
+            handle /bazarr {
+              redir https://bazarr.{$NEST_DOMAIN}
             }
 
             handle {

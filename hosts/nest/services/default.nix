@@ -1,5 +1,6 @@
 {
   imports = [
+    ./arr.nix
     ./blocky.nix
     ./backups.nix
     ./caddy.nix

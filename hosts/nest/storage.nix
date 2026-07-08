@@ -1,3 +1,4 @@
+{ lib, options, ... }:
 let
   mediaDirs = [
     "/srv/media"
@@ -13,12 +14,22 @@ let
   ];
 in
 {
-  users.groups.media = { };
+  config = lib.mkMerge [
+    {
+      users.groups.media = { };
 
-  users.users.duck.extraGroups = [ "media" ];
+      users.users.duck.extraGroups = [ "media" ];
 
-  systemd.tmpfiles.rules = [
-    "d /srv/backups 0750 root root - -"
-  ]
-  ++ map (dir: "d ${dir} 2775 root media - -") (mediaDirs ++ downloadDirs);
+      systemd.tmpfiles.rules = [
+        "d /srv/backups 0750 root root - -"
+      ]
+      ++ map (dir: "d ${dir} 2775 root media - -") (mediaDirs ++ downloadDirs);
+    }
+    (lib.optionalAttrs (options.environment ? "persistence") {
+      environment.persistence."/persist".directories = [
+        "/srv/downloads"
+        "/srv/media"
+      ];
+    })
+  ];
 }

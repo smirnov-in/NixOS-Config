@@ -67,6 +67,40 @@
               }
             ];
           }
+          {
+            Media = [
+              {
+                qBittorrent = {
+                  href = "/qbit";
+                  description = "Downloads";
+                };
+              }
+              {
+                Prowlarr = {
+                  href = "/prowlarr";
+                  description = "Indexers";
+                };
+              }
+              {
+                Sonarr = {
+                  href = "/sonarr";
+                  description = "TV";
+                };
+              }
+              {
+                Radarr = {
+                  href = "/radarr";
+                  description = "Movies";
+                };
+              }
+              {
+                Bazarr = {
+                  href = "/bazarr";
+                  description = "Subtitles";
+                };
+              }
+            ];
+          }
         ];
       };
     }
