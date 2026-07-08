@@ -70,6 +70,7 @@ in
     }
     (lib.optionalAttrs (options.environment ? "persistence") {
       environment.persistence."/persist".directories = [
+        backupDir
         "/var/lib/vaultwarden"
       ];
     })
