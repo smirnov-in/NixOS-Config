@@ -1,10 +1,15 @@
 {
+  config,
   lib,
   options,
+  pkgs,
   ...
 }:
 let
   mediaLocation = "/srv/immich";
+  backupDir = "/srv/backups/immich";
+  dbName = config.services.immich.database.name;
+  dbUser = config.services.immich.database.user;
 in
 {
   config = lib.mkMerge [
@@ -37,9 +42,69 @@ in
       systemd.tmpfiles.rules = [
         "d ${mediaLocation} 0700 immich immich - -"
       ];
+
+      nest.backups.local.jobs.immich = {
+        description = "Back up Immich state";
+        after = [
+          "immich-server.service"
+          "postgresql.target"
+        ];
+        inherit backupDir;
+        timerConfig = {
+          OnCalendar = "weekly";
+          Persistent = true;
+          RandomizedDelaySec = "1h";
+        };
+        retention = {
+          days = 28;
+          pattern = "immich-*.tar.zst";
+        };
+        script = ''
+          umask 0077
+
+          stamp="$(${pkgs.coreutils}/bin/date --utc +%Y%m%dT%H%M%SZ)"
+          archive="${backupDir}/immich-''${stamp}.tar.zst"
+          archive_tmp="''${archive}.tmp"
+          workdir="$(${pkgs.coreutils}/bin/mktemp -d "${backupDir}/.immich-backup.XXXXXX")"
+          immich_was_active=false
+
+          cleanup() {
+            ${pkgs.coreutils}/bin/rm -rf "$workdir" "$archive_tmp"
+            if [ "$immich_was_active" = true ]; then
+              ${pkgs.systemd}/bin/systemctl start immich-server.service || true
+            fi
+          }
+          trap cleanup EXIT
+
+          if ${pkgs.systemd}/bin/systemctl is-active --quiet immich-server.service; then
+            immich_was_active=true
+            ${pkgs.systemd}/bin/systemctl stop immich-server.service
+          fi
+
+          ${pkgs.util-linux}/bin/runuser --user ${dbUser} -- \
+            ${config.services.postgresql.package}/bin/pg_dump \
+            --host=/run/postgresql \
+            --username=${dbUser} \
+            --dbname=${dbName} \
+            --format=custom \
+            > "$workdir/postgresql.dump"
+
+          ${pkgs.gnutar}/bin/tar \
+            --create \
+            --use-compress-program '${pkgs.zstd}/bin/zstd -T0' \
+            --file "$archive_tmp" \
+            --directory "$workdir" \
+            postgresql.dump \
+            --directory ${mediaLocation} \
+            .
+
+          ${pkgs.coreutils}/bin/mv "$archive_tmp" "$archive"
+        '';
+      };
     }
     (lib.optionalAttrs (options.environment ? "persistence") {
       environment.persistence."/persist".directories = [
+        backupDir
         mediaLocation
         "/var/cache/immich"
         "/var/lib/immich"
