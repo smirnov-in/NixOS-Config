@@ -11,7 +11,7 @@
     ../common/gui/niri.nix
     ../common/gui/plymouth.nix
 
-    ../common/services/amnezia.nix
+    ../common/networking/vpn/amnezia-system.nix
     ../common/services/printing.nix
 
     ../common/security/fingerprint.nix

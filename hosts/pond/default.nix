@@ -13,7 +13,6 @@
     ../common/gui/plymouth.nix
     ../common/gui/steam.nix
 
-    # ../common/services/amnezia.nix
     ../common/services/printing.nix
 
     ../common/security/yubikey.nix
