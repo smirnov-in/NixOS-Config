@@ -6,6 +6,7 @@
   ...
 }:
 let
+  amneziaAddress = config.duck.vpn.amnezia.instances.amnezia.namespaceAddress;
   backupDir = "/srv/backups/arr";
   arrStateDirs = [
     "/var/lib/bazarr"
@@ -70,6 +71,89 @@ in
       };
 
       duck.vpn.amnezia.instances.amnezia.services = arrServices;
+
+      services.caddy.extraConfig = ''
+        qbit.{$NEST_DOMAIN} {
+          import lan_only
+          reverse_proxy ${amneziaAddress}:8080
+        }
+
+        prowlarr.{$NEST_DOMAIN} {
+          import lan_only
+          reverse_proxy ${amneziaAddress}:9696
+        }
+
+        sonarr.{$NEST_DOMAIN} {
+          import lan_only
+          reverse_proxy ${amneziaAddress}:8989
+        }
+
+        radarr.{$NEST_DOMAIN} {
+          import lan_only
+          reverse_proxy ${amneziaAddress}:7878
+        }
+
+        bazarr.{$NEST_DOMAIN} {
+          import lan_only
+          reverse_proxy ${amneziaAddress}:6767
+        }
+      '';
+
+      nest.dashboard.groups.media = [
+        {
+          qBittorrent = {
+            href = "/qbit";
+            description = "Downloads";
+          };
+        }
+        {
+          Prowlarr = {
+            href = "/prowlarr";
+            description = "Indexers";
+          };
+        }
+        {
+          Sonarr = {
+            href = "/sonarr";
+            description = "TV";
+          };
+        }
+        {
+          Radarr = {
+            href = "/radarr";
+            description = "Movies";
+          };
+        }
+        {
+          Bazarr = {
+            href = "/bazarr";
+            description = "Subtitles";
+          };
+        }
+      ];
+
+      nest.dashboard.redirects = [
+        {
+          path = "/qbit";
+          target = "qbit";
+        }
+        {
+          path = "/prowlarr";
+          target = "prowlarr";
+        }
+        {
+          path = "/sonarr";
+          target = "sonarr";
+        }
+        {
+          path = "/radarr";
+          target = "radarr";
+        }
+        {
+          path = "/bazarr";
+          target = "bazarr";
+        }
+      ];
 
       systemd.services = {
         bazarr.serviceConfig.ReadWritePaths = [

@@ -39,6 +39,30 @@ in
         accelerationDevices = [ "/dev/dri/renderD128" ];
       };
 
+      services.postgresqlBackup.databases = [ dbName ];
+
+      services.caddy.extraConfig = ''
+        immich.{$NEST_DOMAIN} {
+          reverse_proxy 127.0.0.1:2283
+        }
+      '';
+
+      nest.dashboard.groups.services = [
+        {
+          Immich = {
+            href = "/immich";
+            description = "Photos";
+          };
+        }
+      ];
+
+      nest.dashboard.redirects = [
+        {
+          path = "/immich";
+          target = "immich";
+        }
+      ];
+
       systemd.tmpfiles.rules = [
         "d ${mediaLocation} 0700 immich immich - -"
       ];

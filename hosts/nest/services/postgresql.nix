@@ -4,10 +4,7 @@
     {
       services.postgresqlBackup = {
         enable = true;
-        databases = [
-          "immich"
-          "nextcloud"
-        ];
+        backupAll = false;
         location = "/srv/backups/postgresql";
         compression = "zstd";
       };

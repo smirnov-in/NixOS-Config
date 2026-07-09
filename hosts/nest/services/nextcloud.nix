@@ -62,6 +62,30 @@ in
         };
       };
 
+      services.postgresqlBackup.databases = [ dbName ];
+
+      services.caddy.extraConfig = ''
+        nextcloud.{$NEST_DOMAIN} {
+          reverse_proxy 127.0.0.1:8081
+        }
+      '';
+
+      nest.dashboard.groups.services = [
+        {
+          Nextcloud = {
+            href = "/nextcloud";
+            description = "Files";
+          };
+        }
+      ];
+
+      nest.dashboard.redirects = [
+        {
+          path = "/nextcloud";
+          target = "nextcloud";
+        }
+      ];
+
       services.nginx.virtualHosts.${hostName} = {
         default = true;
         listen = [

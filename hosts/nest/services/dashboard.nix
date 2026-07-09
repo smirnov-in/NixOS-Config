@@ -4,9 +4,65 @@
   options,
   ...
 }:
+let
+  cfg = config.nest.dashboard;
+
+  mkRedirect = route: ''
+    handle ${route.path} {
+      redir https://${route.target}.{$NEST_DOMAIN}
+    }
+  '';
+
+  redirectsConfig = lib.concatMapStringsSep "\n" mkRedirect cfg.redirects;
+in
 {
+  options.nest.dashboard = {
+    groups = {
+      services = lib.mkOption {
+        type = lib.types.listOf lib.types.attrs;
+        default = [ ];
+      };
+
+      media = lib.mkOption {
+        type = lib.types.listOf lib.types.attrs;
+        default = [ ];
+      };
+    };
+
+    redirects = lib.mkOption {
+      type = lib.types.listOf (
+        lib.types.submodule {
+          options = {
+            path = lib.mkOption {
+              type = lib.types.str;
+            };
+
+            target = lib.mkOption {
+              type = lib.types.str;
+            };
+          };
+        }
+      );
+      default = [ ];
+    };
+  };
+
   config = lib.mkMerge [
     {
+      services.caddy.extraConfig = ''
+        dashboard.{$NEST_DOMAIN} {
+          import lan_only
+
+          ${redirectsConfig}
+
+          handle {
+            reverse_proxy 127.0.0.1:8082 {
+              header_up Host localhost:8082
+            }
+          }
+        }
+      '';
+
       services.homepage-dashboard = {
         enable = true;
         listenPort = 8082;
@@ -38,70 +94,9 @@
           }
         ];
 
-        services = [
-          {
-            Services = [
-              {
-                Vaultwarden = {
-                  href = "/vault";
-                  description = "Passwords";
-                };
-              }
-              {
-                Nextcloud = {
-                  href = "/nextcloud";
-                  description = "Files";
-                };
-              }
-              {
-                Jellyfin = {
-                  href = "/jellyfin";
-                  description = "Media";
-                };
-              }
-              {
-                Immich = {
-                  href = "/immich";
-                  description = "Photos";
-                };
-              }
-            ];
-          }
-          {
-            Media = [
-              {
-                qBittorrent = {
-                  href = "/qbit";
-                  description = "Downloads";
-                };
-              }
-              {
-                Prowlarr = {
-                  href = "/prowlarr";
-                  description = "Indexers";
-                };
-              }
-              {
-                Sonarr = {
-                  href = "/sonarr";
-                  description = "TV";
-                };
-              }
-              {
-                Radarr = {
-                  href = "/radarr";
-                  description = "Movies";
-                };
-              }
-              {
-                Bazarr = {
-                  href = "/bazarr";
-                  description = "Subtitles";
-                };
-              }
-            ];
-          }
-        ];
+        services =
+          lib.optional (cfg.groups.services != [ ]) { Services = cfg.groups.services; }
+          ++ lib.optional (cfg.groups.media != [ ]) { Media = cfg.groups.media; };
       };
     }
     (lib.optionalAttrs (options.environment ? "persistence") {

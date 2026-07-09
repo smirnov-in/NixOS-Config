@@ -39,6 +39,38 @@ in
         };
       };
 
+      services.caddy.extraConfig = ''
+        vault.{$NEST_DOMAIN} {
+          @admin path /admin*
+          @not_lan not remote_ip 192.168.1.0/24
+
+          handle @admin {
+            respond @not_lan 403
+            reverse_proxy 127.0.0.1:8222
+          }
+
+          handle {
+            reverse_proxy 127.0.0.1:8222
+          }
+        }
+      '';
+
+      nest.dashboard.groups.services = [
+        {
+          Vaultwarden = {
+            href = "/vault";
+            description = "Passwords";
+          };
+        }
+      ];
+
+      nest.dashboard.redirects = [
+        {
+          path = "/vault";
+          target = "vault";
+        }
+      ];
+
       nest.backups.local.jobs.vaultwarden = {
         description = "Back up Vaultwarden state";
         after = [ "vaultwarden.service" ];
