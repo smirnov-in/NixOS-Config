@@ -95,6 +95,7 @@ in
 
           ${pkgs.gnutar}/bin/tar \
             --create \
+            --exclude ./log \
             --use-compress-program '${pkgs.zstd}/bin/zstd -T0' \
             --file "$archive_tmp" \
             --directory ${dataDir} \
