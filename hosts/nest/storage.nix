@@ -21,7 +21,7 @@ in
       users.users.duck.extraGroups = [ "media" ];
 
       systemd.tmpfiles.rules = [
-        "d /srv/backups 0750 root root - -"
+        "d /srv/backups 0751 root root - -"
       ]
       ++ map (dir: "d ${dir} 2775 root media - -") (mediaDirs ++ downloadDirs);
     }
