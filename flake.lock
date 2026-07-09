@@ -181,10 +181,10 @@
     "nix-secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1783533811,
-        "narHash": "sha256-Hb0kg6BB/u9Gt/0MEff9GDx6UUut/pgYL5fCEjwl75Y=",
+        "lastModified": 1783594569,
+        "narHash": "sha256-zD2cByrS8BysHyYWtohkMy8ne9FL7MJi2H0cudS9WSY=",
         "ref": "main",
-        "rev": "f2800065999d7fcb006fe49e4a7d7896c5f4877d",
+        "rev": "7e0f001f2e80a609d6fbee90085ee2c32085e680",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/smirnov-in/NixOS-Secrets.git"
