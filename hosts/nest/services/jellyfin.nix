@@ -5,6 +5,10 @@
   pkgs,
   ...
 }:
+let
+  dataDir = "/var/lib/jellyfin";
+  backupDir = "/srv/backups/jellyfin";
+in
 {
   config = lib.mkMerge [
     {
@@ -54,11 +58,57 @@
           target = "jellyfin";
         }
       ];
+
+      nest.backups.local.jobs.jellyfin = {
+        description = "Back up Jellyfin state";
+        after = [ "jellyfin.service" ];
+        inherit backupDir;
+        timerConfig = {
+          OnCalendar = "weekly";
+          Persistent = true;
+          RandomizedDelaySec = "1h";
+        };
+        retention = {
+          days = 28;
+          pattern = "jellyfin-*.tar.zst";
+        };
+        script = ''
+          umask 0077
+
+          stamp="$(${pkgs.coreutils}/bin/date --utc +%Y%m%dT%H%M%SZ)"
+          archive="${backupDir}/jellyfin-''${stamp}.tar.zst"
+          archive_tmp="''${archive}.tmp"
+          jellyfin_was_active=false
+
+          cleanup() {
+            ${pkgs.coreutils}/bin/rm -f "$archive_tmp"
+            if [ "$jellyfin_was_active" = true ]; then
+              ${pkgs.systemd}/bin/systemctl start jellyfin.service || true
+            fi
+          }
+          trap cleanup EXIT
+
+          if ${pkgs.systemd}/bin/systemctl is-active --quiet jellyfin.service; then
+            jellyfin_was_active=true
+            ${pkgs.systemd}/bin/systemctl stop jellyfin.service
+          fi
+
+          ${pkgs.gnutar}/bin/tar \
+            --create \
+            --use-compress-program '${pkgs.zstd}/bin/zstd -T0' \
+            --file "$archive_tmp" \
+            --directory ${dataDir} \
+            .
+
+          ${pkgs.coreutils}/bin/mv "$archive_tmp" "$archive"
+        '';
+      };
     }
     (lib.optionalAttrs (options.environment ? "persistence") {
       environment.persistence."/persist".directories = [
+        backupDir
         "/var/cache/jellyfin"
-        "/var/lib/jellyfin"
+        dataDir
       ];
     })
   ];
