@@ -36,10 +36,6 @@
               respond 403
             }
           }
-
-          {$NEST_DOMAIN} {
-            respond "nest is ready"
-          }
         '';
       };
     }

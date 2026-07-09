@@ -50,7 +50,7 @@ in
   config = lib.mkMerge [
     {
       services.caddy.extraConfig = ''
-        dashboard.{$NEST_DOMAIN} {
+        {$NEST_DOMAIN} {
           import lan_only
 
           ${redirectsConfig}
@@ -60,6 +60,10 @@ in
               header_up Host localhost:8082
             }
           }
+        }
+
+        dashboard.{$NEST_DOMAIN} {
+          redir https://{$NEST_DOMAIN}{uri}
         }
       '';
 
