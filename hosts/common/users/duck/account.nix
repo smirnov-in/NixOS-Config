@@ -13,7 +13,6 @@
       hashedPasswordFile = config.sops.secrets.duck-password.path;
       extraGroups = [
         "networkmanager"
-        "transmission"
         "wheel"
       ];
       openssh.authorizedKeys.keyFiles = [

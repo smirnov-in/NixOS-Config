@@ -13,7 +13,6 @@
 
     ../common/services/amnezia.nix
     ../common/services/printing.nix
-    ../common/services/transmission.nix
 
     ../common/security/fingerprint.nix
 
