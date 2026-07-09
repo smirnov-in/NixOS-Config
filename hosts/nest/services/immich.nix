@@ -9,7 +9,7 @@ let
   mediaLocation = "/srv/immich";
   backupDir = "/srv/backups/immich";
   dbName = config.services.immich.database.name;
-  dbUser = config.services.immich.database.user;
+  dbDump = "${config.services.postgresqlBackup.location}/${dbName}.sql.zstd";
 in
 {
   config = lib.mkMerge [
@@ -81,20 +81,15 @@ in
             ${pkgs.systemd}/bin/systemctl stop immich-server.service
           fi
 
-          ${pkgs.util-linux}/bin/runuser --user ${dbUser} -- \
-            ${config.services.postgresql.package}/bin/pg_dump \
-            --host=/run/postgresql \
-            --username=${dbUser} \
-            --dbname=${dbName} \
-            --format=custom \
-            > "$workdir/postgresql.dump"
+          ${pkgs.systemd}/bin/systemctl start postgresqlBackup-${dbName}.service
+          ${pkgs.coreutils}/bin/install --mode 0400 ${dbDump} "$workdir/postgresql.sql.zstd"
 
           ${pkgs.gnutar}/bin/tar \
             --create \
             --use-compress-program '${pkgs.zstd}/bin/zstd -T0' \
             --file "$archive_tmp" \
             --directory "$workdir" \
-            postgresql.dump \
+            postgresql.sql.zstd \
             --directory ${mediaLocation} \
             .
 
