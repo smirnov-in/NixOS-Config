@@ -21,6 +21,14 @@ let
     "radarr"
     "sonarr"
   ];
+  arrBackupDirs = [
+    "/var/lib/bazarr/Backups"
+    "/var/lib/bazarr/backup"
+    "/var/lib/bazarr/backups"
+    "/var/lib/prowlarr/Backups"
+    "/var/lib/radarr/.config/Radarr/Backups"
+    "/var/lib/sonarr/.config/NzbDrone/Backups"
+  ];
 in
 {
   config = lib.mkMerge [
@@ -104,36 +112,38 @@ in
           stamp="$(${pkgs.coreutils}/bin/date --utc +%Y%m%dT%H%M%SZ)"
           archive="${backupDir}/arr-''${stamp}.tar.zst"
           archive_tmp="''${archive}.tmp"
-          services=(${lib.concatStringsSep " " arrServices})
-          active_services=()
+          workdir="$(${pkgs.coreutils}/bin/mktemp -d "${backupDir}/.arr-backup.XXXXXX")"
+          qbittorrent_was_active=false
 
           cleanup() {
-            ${pkgs.coreutils}/bin/rm -f "$archive_tmp"
-            for service in "''${active_services[@]}"; do
-              ${pkgs.systemd}/bin/systemctl start "$service.service" || true
-            done
+            ${pkgs.coreutils}/bin/rm -rf "$workdir" "$archive_tmp"
+            if [ "$qbittorrent_was_active" = true ]; then
+              ${pkgs.systemd}/bin/systemctl start qbittorrent.service || true
+            fi
           }
           trap cleanup EXIT
 
-          for service in "''${services[@]}"; do
-            if ${pkgs.systemd}/bin/systemctl is-active --quiet "$service.service"; then
-              active_services+=("$service")
-              ${pkgs.systemd}/bin/systemctl stop "$service.service"
+          for path in ${lib.escapeShellArgs arrBackupDirs}; do
+            if [ -e "$path" ]; then
+              ${pkgs.coreutils}/bin/install -d "$workdir/$(${pkgs.coreutils}/bin/dirname "$path")"
+              ${pkgs.coreutils}/bin/cp -a --parents "$path" "$workdir"
             fi
           done
 
+          if ${pkgs.systemd}/bin/systemctl is-active --quiet qbittorrent.service; then
+            qbittorrent_was_active=true
+            ${pkgs.systemd}/bin/systemctl stop qbittorrent.service
+          fi
+
+          ${pkgs.coreutils}/bin/install -d "$workdir/var/lib"
+          ${pkgs.coreutils}/bin/cp -a --parents /var/lib/qbittorrent "$workdir"
+
           ${pkgs.gnutar}/bin/tar \
             --create \
-            --ignore-failed-read \
             --use-compress-program '${pkgs.zstd}/bin/zstd -T0' \
             --file "$archive_tmp" \
-            --directory /var/lib \
-            bazarr \
-            qbittorrent \
-            radarr \
-            sonarr \
-            --directory /var/lib/private \
-            prowlarr
+            --directory "$workdir" \
+            .
 
           ${pkgs.coreutils}/bin/mv "$archive_tmp" "$archive"
         '';
