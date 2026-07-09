@@ -10,6 +10,8 @@
         networkmanager.enable = true;
         useDHCP = lib.mkDefault true;
       };
+
+      users.users.duck.extraGroups = [ "networkmanager" ];
     }
     (lib.optionalAttrs (options.environment ? "persistence") {
       environment.persistence."/persist".directories = [

@@ -12,7 +12,6 @@
       isNormalUser = true;
       hashedPasswordFile = config.sops.secrets.duck-password.path;
       extraGroups = [
-        "networkmanager"
         "wheel"
       ];
       openssh.authorizedKeys.keyFiles = [
