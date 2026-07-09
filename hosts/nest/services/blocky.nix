@@ -1,10 +1,16 @@
 { lib, ... }:
+let
+  metricsPort = 4000;
+in
 {
   services.blocky = {
     enable = true;
 
     settings = {
-      ports.dns = 53;
+      ports = {
+        dns = 53;
+        http = "127.0.0.1:${toString metricsPort}";
+      };
 
       upstreams = {
         strategy = "parallel_best";
@@ -49,8 +55,24 @@
         timestamp = true;
         privacy = false;
       };
+
+      prometheus = {
+        enable = true;
+        path = "/metrics";
+      };
     };
   };
+
+  services.prometheus.scrapeConfigs = [
+    {
+      job_name = "blocky";
+      static_configs = [
+        {
+          targets = [ "127.0.0.1:${toString metricsPort}" ];
+        }
+      ];
+    }
+  ];
 
   networking.firewall.interfaces.eno1 = {
     allowedTCPPorts = [ 53 ];

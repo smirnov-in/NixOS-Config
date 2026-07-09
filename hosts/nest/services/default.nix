@@ -7,6 +7,7 @@
     ./dashboard.nix
     ./immich.nix
     ./jellyfin.nix
+    ./monitoring.nix
     ./nextcloud.nix
     ./postgresql.nix
     ./vaultwarden.nix
