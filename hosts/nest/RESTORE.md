@@ -104,9 +104,24 @@ systemctl start qbittorrent.service
 
 Downloads under `/srv/downloads` and media under `/srv/media` are not included.
 
+## Uptime Kuma
+
+The Uptime Kuma archive contains monitors, status pages, users, and check
+history from `/var/lib/uptime-kuma`.
+
+```sh
+systemctl stop uptime-kuma.service
+workdir="$(mktemp -d)"
+tar --use-compress-program zstd -xf /srv/backups/uptime-kuma/uptime-kuma-YYYYMMDDTHHMMSSZ.tar.zst -C "$workdir"
+rsync -a --delete "$workdir"/ /var/lib/uptime-kuma/
+rm -rf "$workdir"
+systemctl start uptime-kuma.service
+```
+
 ## Caddy and Blocky
 
 Caddy ACME state is persisted in `/var/lib/caddy`, but not copied into a local
 backup archive. On a fresh restore Caddy can reissue certificates.
 
-Blocky has no local application state in the current configuration.
+Blocky has no local application state in the current configuration; DNS rules
+are declarative.
