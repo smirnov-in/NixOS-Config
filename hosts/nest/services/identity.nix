@@ -43,7 +43,8 @@ in
                 policy: one_factor
               - domain: ${config.sops.placeholder."nest/domain"}
                 policy: one_factor
-                subject: group:admins
+                subject:
+                  - group:admins
 
           session:
             cookies:
