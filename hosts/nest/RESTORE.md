@@ -118,6 +118,21 @@ rm -rf "$workdir"
 systemctl start uptime-kuma.service
 ```
 
+## Identity
+
+The Identity archive contains Authelia state from `/var/lib/authelia-main` and
+LLDAP state from `/var/lib/lldap`.
+
+```sh
+systemctl stop authelia-main.service lldap.service
+workdir="$(mktemp -d)"
+tar --use-compress-program zstd -xf /srv/backups/identity/identity-YYYYMMDDTHHMMSSZ.tar.zst -C "$workdir"
+rsync -a --delete "$workdir/var/lib/authelia-main/" /var/lib/authelia-main/
+rsync -a --delete "$workdir/var/lib/lldap/" /var/lib/lldap/
+rm -rf "$workdir"
+systemctl start lldap.service authelia-main.service
+```
+
 ## Caddy and Blocky
 
 Caddy ACME state is persisted in `/var/lib/caddy`, but not copied into a local

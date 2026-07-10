@@ -5,6 +5,7 @@
     ./backups.nix
     ./caddy.nix
     ./dashboard.nix
+    ./identity.nix
     ./immich.nix
     ./jellyfin.nix
     ./monitoring.nix
