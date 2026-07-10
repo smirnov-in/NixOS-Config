@@ -6,6 +6,11 @@
   ...
 }:
 let
+  prometheusDatasource = {
+    type = "prometheus";
+    uid = "$" + "{ds_prometheus}";
+  };
+
   dashboards = pkgs.linkFarm "grafana-dashboards" [
     {
       name = "node-exporter-full.json";
@@ -28,6 +33,19 @@ let
           schemaVersion = 41;
           version = 1;
           refresh = "30s";
+          templating.list = [
+            {
+              current = { };
+              includeAll = false;
+              label = "Datasource";
+              name = "ds_prometheus";
+              options = [ ];
+              query = "prometheus";
+              refresh = 1;
+              regex = "";
+              type = "datasource";
+            }
+          ];
           time = {
             from = "now-6h";
             to = "now";
@@ -37,10 +55,7 @@ let
               id = 1;
               type = "stat";
               title = "Blocking";
-              datasource = {
-                type = "prometheus";
-                uid = "prometheus";
-              };
+              datasource = prometheusDatasource;
               gridPos = {
                 h = 4;
                 w = 6;
@@ -51,10 +66,7 @@ let
                 {
                   refId = "A";
                   expr = "blocky_blocking_enabled";
-                  datasource = {
-                    type = "prometheus";
-                    uid = "prometheus";
-                  };
+                  datasource = prometheusDatasource;
                 }
               ];
               fieldConfig = {
@@ -100,10 +112,7 @@ let
               id = 2;
               type = "stat";
               title = "Cache entries";
-              datasource = {
-                type = "prometheus";
-                uid = "prometheus";
-              };
+              datasource = prometheusDatasource;
               gridPos = {
                 h = 4;
                 w = 6;
@@ -114,10 +123,7 @@ let
                 {
                   refId = "A";
                   expr = "blocky_cache_entries";
-                  datasource = {
-                    type = "prometheus";
-                    uid = "prometheus";
-                  };
+                  datasource = prometheusDatasource;
                 }
               ];
               fieldConfig = {
@@ -140,10 +146,7 @@ let
               id = 3;
               type = "timeseries";
               title = "Cache";
-              datasource = {
-                type = "prometheus";
-                uid = "prometheus";
-              };
+              datasource = prometheusDatasource;
               gridPos = {
                 h = 8;
                 w = 12;
@@ -155,19 +158,13 @@ let
                   refId = "A";
                   expr = "sum(rate(blocky_cache_hits_total[$__rate_interval]))";
                   legendFormat = "hits";
-                  datasource = {
-                    type = "prometheus";
-                    uid = "prometheus";
-                  };
+                  datasource = prometheusDatasource;
                 }
                 {
                   refId = "B";
                   expr = "sum(rate(blocky_cache_misses_total[$__rate_interval]))";
                   legendFormat = "misses";
-                  datasource = {
-                    type = "prometheus";
-                    uid = "prometheus";
-                  };
+                  datasource = prometheusDatasource;
                 }
               ];
               fieldConfig = {
@@ -299,12 +296,10 @@ in
 
           datasources.settings = {
             apiVersion = 1;
-            prune = true;
             datasources = [
               {
                 name = "Prometheus";
                 type = "prometheus";
-                uid = "prometheus";
                 access = "proxy";
                 url = "http://127.0.0.1:9090";
                 isDefault = true;
