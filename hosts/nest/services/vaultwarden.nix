@@ -42,7 +42,7 @@ in
       services.caddy.extraConfig = ''
         vault.{$NEST_DOMAIN} {
           @admin path /admin*
-          @not_lan not remote_ip 192.168.1.0/24
+          @not_lan not remote_ip 192.168.1.0/24 {$NEST_REMOTE_ACCESS_CIDRS:}
 
           handle @admin {
             respond @not_lan 403

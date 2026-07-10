@@ -10,6 +10,7 @@
     ./monitoring.nix
     ./nextcloud.nix
     ./postgresql.nix
+    ./remote-access.nix
     ./vaultwarden.nix
   ];
 }

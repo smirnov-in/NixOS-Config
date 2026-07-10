@@ -30,7 +30,7 @@
 
         extraConfig = lib.mkBefore ''
           (lan_only) {
-            @not_lan not remote_ip 192.168.1.0/24
+            @not_lan not remote_ip 192.168.1.0/24 {$NEST_REMOTE_ACCESS_CIDRS:}
 
             handle @not_lan {
               respond 403
