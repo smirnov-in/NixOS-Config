@@ -51,14 +51,16 @@ in
     {
       services.caddy.extraConfig = ''
         {$NEST_DOMAIN} {
-          import lan_only
-          import authelia_forward_auth
+          route {
+            import lan_only
+            import authelia_forward_auth
 
-          ${redirectsConfig}
+            ${redirectsConfig}
 
-          handle {
-            reverse_proxy 127.0.0.1:8082 {
-              header_up Host localhost:8082
+            handle {
+              reverse_proxy 127.0.0.1:8082 {
+                header_up Host localhost:8082
+              }
             }
           }
         }
