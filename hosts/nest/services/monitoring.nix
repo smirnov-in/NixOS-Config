@@ -288,7 +288,10 @@ in
             root_url = "https://grafana.$__env{NEST_DOMAIN}/";
           };
 
-          users.allow_sign_up = false;
+          users = {
+            allow_sign_up = false;
+            home_page = "/dashboards";
+          };
         };
 
         provision = {
@@ -324,12 +327,25 @@ in
         };
       };
 
+      services.uptime-kuma = {
+        enable = true;
+        settings = {
+          HOST = "127.0.0.1";
+          PORT = "3001";
+        };
+      };
+
       systemd.services.grafana.serviceConfig.EnvironmentFile = config.sops.templates."grafana.env".path;
 
       services.caddy.extraConfig = ''
         grafana.{$NEST_DOMAIN} {
           import lan_only
           reverse_proxy 127.0.0.1:3000
+        }
+
+        uptime.{$NEST_DOMAIN} {
+          import lan_only
+          reverse_proxy 127.0.0.1:3001
         }
       '';
 
@@ -340,6 +356,12 @@ in
             description = "Metrics";
           };
         }
+        {
+          Uptime = {
+            href = "/uptime";
+            description = "Health checks";
+          };
+        }
       ];
 
       nest.dashboard.redirects = [
@@ -347,12 +369,17 @@ in
           path = "/grafana";
           target = "grafana";
         }
+        {
+          path = "/uptime";
+          target = "uptime";
+        }
       ];
     }
     (lib.optionalAttrs (options.environment ? "persistence") {
       environment.persistence."/persist".directories = [
         "/var/lib/grafana"
         "/var/lib/prometheus2"
+        "/var/lib/uptime-kuma"
       ];
     })
   ];
