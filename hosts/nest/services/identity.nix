@@ -116,7 +116,7 @@ in
         (lib.mkBefore ''
           (authelia_forward_auth) {
             forward_auth 127.0.0.1:9091 {
-              uri /api/authz/forward-auth
+              uri /api/authz/forward-auth?authelia_url=https://auth.{$NEST_DOMAIN}/
               copy_headers Remote-User Remote-Groups Remote-Name Remote-Email
             }
           }
