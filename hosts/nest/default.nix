@@ -2,6 +2,7 @@
   imports = [
     ./hardware
     ./networking.nix
+    ./security.nix
     ./services
     ./storage.nix
     ./vpn/amnezia.nix
