@@ -41,6 +41,8 @@ in
             rules:
               - domain: auth.${config.sops.placeholder."nest/domain"}
                 policy: one_factor
+              - domain: ${config.sops.placeholder."nest/domain"}
+                policy: one_factor
 
           session:
             cookies:
@@ -110,16 +112,26 @@ in
         "admin-password:${config.sops.secrets."nest/lldap/admin-password".path}"
       ];
 
-      services.caddy.extraConfig = ''
-        auth.{$NEST_DOMAIN} {
-          reverse_proxy 127.0.0.1:9091
-        }
+      services.caddy.extraConfig = lib.mkMerge [
+        (lib.mkBefore ''
+          (authelia_forward_auth) {
+            forward_auth 127.0.0.1:9091 {
+              uri /api/authz/forward-auth
+              copy_headers Remote-User Remote-Groups Remote-Name Remote-Email
+            }
+          }
+        '')
+        ''
+          auth.{$NEST_DOMAIN} {
+            reverse_proxy 127.0.0.1:9091
+          }
 
-        lldap.{$NEST_DOMAIN} {
-          import lan_only
-          reverse_proxy 127.0.0.1:17170
-        }
-      '';
+          lldap.{$NEST_DOMAIN} {
+            import lan_only
+            reverse_proxy 127.0.0.1:17170
+          }
+        ''
+      ];
 
       nest.dashboard.groups.services = [
         {

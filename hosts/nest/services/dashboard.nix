@@ -52,6 +52,7 @@ in
       services.caddy.extraConfig = ''
         {$NEST_DOMAIN} {
           import lan_only
+          import authelia_forward_auth
 
           ${redirectsConfig}
 
