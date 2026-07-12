@@ -13,10 +13,25 @@ let
   mkHostInterface = name: "vpn-${mkInterfaceSuffix name}-h";
   mkNamespaceInterface = name: "vpn-${mkInterfaceSuffix name}-n";
   mkResolvConf = name: "/etc/netns/${name}/resolv.conf";
+  mkNsswitchConf = name: "/etc/netns/${name}/nsswitch.conf";
   mkRuntimeConfig = name: "/run/duck-vpn/amnezia/${name}.conf";
 
   mkNameserverArgs =
     dnsServers: lib.concatMapStringsSep " " (dns: lib.escapeShellArg "nameserver ${dns}") dnsServers;
+
+  nsswitchLines = [
+    "passwd:    files systemd"
+    "group:     files [SUCCESS=merge] systemd"
+    "shadow:    files systemd"
+    "hosts:     files dns"
+    "networks:  files dns"
+    "ethers:    files"
+    "services:  files"
+    "protocols: files"
+    "rpc:       files"
+  ];
+
+  nsswitchArgs = lib.concatMapStringsSep " " lib.escapeShellArg nsswitchLines;
 
   mkNetnsService =
     name: instance:
@@ -53,6 +68,7 @@ let
 
         install -d -m 0755 /etc/netns/${name}
         printf '%s\n' ${mkNameserverArgs instance.dns} > ${mkResolvConf name}
+        printf '%s\n' ${nsswitchArgs} > ${mkNsswitchConf name}
       '';
       preStop = ''
         ${pkgs.iproute2}/bin/ip netns delete ${name} 2>/dev/null || true
@@ -105,7 +121,10 @@ let
       before = map (service: "${service}.service") instance.services;
       serviceConfig = {
         NetworkNamespacePath = "/run/netns/${name}";
-        BindReadOnlyPaths = [ "${mkResolvConf name}:/etc/resolv.conf" ];
+        BindReadOnlyPaths = [
+          "${mkResolvConf name}:/etc/resolv.conf"
+          "${mkNsswitchConf name}:/etc/nsswitch.conf"
+        ];
       };
     };
 
@@ -116,7 +135,10 @@ let
       after = [ "wg-quick-${name}.service" ];
       serviceConfig = {
         NetworkNamespacePath = "/run/netns/${name}";
-        BindReadOnlyPaths = [ "${mkResolvConf name}:/etc/resolv.conf" ];
+        BindReadOnlyPaths = [
+          "${mkResolvConf name}:/etc/resolv.conf"
+          "${mkNsswitchConf name}:/etc/nsswitch.conf"
+        ];
       };
     });
 
