@@ -92,7 +92,17 @@ in
             implementation = "lldap";
             address = "ldap://127.0.0.1:3890";
             base_dn = ldapBaseDn;
+            additional_users_dn = "ou=people";
+            additional_groups_dn = "ou=groups";
+            users_filter = "(&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))";
+            groups_filter = "(&(member={dn})(objectClass=groupOfNames))";
             user = "uid=admin,ou=people,${ldapBaseDn}";
+            attributes = {
+              username = "uid";
+              display_name = "cn";
+              mail = "mail";
+              group_name = "cn";
+            };
           };
 
           access_control.default_policy = "deny";
