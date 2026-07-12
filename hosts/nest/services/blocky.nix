@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   services.blocky = {
     enable = true;
@@ -27,13 +28,15 @@
 
       blocking = {
         denylists.ads = [
-          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt"
-          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_2.txt"
+          "${pkgs.stevenblack-blocklist}/hosts"
         ];
         clientGroupsBlock.default = [ "ads" ];
         blockType = "zeroIp";
         blockTTL = "1m";
-        loading.refreshPeriod = "4h";
+        loading = {
+          refreshPeriod = "4h";
+          strategy = "failOnError";
+        };
       };
 
       caching = {
