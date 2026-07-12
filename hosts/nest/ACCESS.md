@@ -25,7 +25,10 @@ The default rule is conservative:
 
 - use Authelia/OIDC where the service supports it well;
 - keep local service accounts where clients or admin flows need them;
-- keep service admin accounts separate from ordinary user accounts;
+- keep admin and daily user identities separate for user-facing services where
+  multiple people have accounts;
+- treat operator-only panels as administrative surfaces instead of creating
+  artificial non-admin users inside each panel;
 - do not hide a local login until mobile, DAV, recovery, and admin workflows
   are known to work without it.
 
