@@ -123,6 +123,13 @@ let
   namespacedServiceConfigs = lib.foldl' lib.recursiveUpdate { } (
     lib.mapAttrsToList mkNamespacedServiceConfigs enabledInstances
   );
+
+  hostFirewallInterfaces = lib.mapAttrs' (
+    name: instance:
+    lib.nameValuePair (mkHostInterface name) {
+      allowedTCPPorts = instance.hostAllowedTCPPorts;
+    }
+  ) (lib.filterAttrs (_: instance: instance.hostAllowedTCPPorts != [ ]) enabledInstances);
 in
 {
   options.duck.vpn.amnezia.instances = lib.mkOption {
@@ -164,6 +171,12 @@ in
             default = [ ];
             description = "Systemd service names to run inside this VPN namespace.";
           };
+
+          hostAllowedTCPPorts = lib.mkOption {
+            type = lib.types.listOf lib.types.port;
+            default = [ ];
+            description = "Host-side veth TCP ports reachable from this VPN namespace.";
+          };
         };
       }
     );
@@ -192,6 +205,8 @@ in
     };
 
     networking.wg-quick.interfaces = lib.mapAttrs mkWgQuickInterface enabledInstances;
+
+    networking.firewall.interfaces = hostFirewallInterfaces;
 
     systemd.services =
       lib.mapAttrs' mkNetnsService enabledInstances

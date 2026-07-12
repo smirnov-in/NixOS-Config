@@ -6,6 +6,7 @@
   ...
 }:
 let
+  amneziaAddress = config.duck.vpn.amnezia.instances.amnezia.namespaceAddress;
   dataDir = "/var/lib/seerr";
   backupDir = "/srv/backups/seerr";
 in
@@ -21,9 +22,11 @@ in
       services.caddy.extraConfig = ''
         seerr.{$NEST_DOMAIN} {
           import lan_only
-          reverse_proxy 127.0.0.1:5055
+          reverse_proxy ${amneziaAddress}:5055
         }
       '';
+
+      duck.vpn.amnezia.instances.amnezia.services = [ "seerr" ];
 
       nest.dashboard.groups.media = [
         {
