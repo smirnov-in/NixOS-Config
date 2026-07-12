@@ -42,7 +42,7 @@ in
               "tokenEndpointAuthMethod": "client_secret_post"
             },
             "passwordLogin": {
-              "enabled": true
+              "enabled": false
             }
           }
         '';
