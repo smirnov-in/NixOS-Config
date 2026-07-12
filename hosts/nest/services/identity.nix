@@ -40,6 +40,11 @@ in
           group = "authelia-main";
         };
 
+        "nest/authelia/oidc/nextcloud-client-secret-digest" = {
+          owner = "authelia-main";
+          group = "authelia-main";
+        };
+
         "nest/lldap/admin-password" = {
           owner = "root";
           group = "authelia-main";
@@ -91,6 +96,21 @@ in
                   require_pkce: true
                   pkce_challenge_method: S256
                   token_endpoint_auth_method: client_secret_post
+                - client_id: nextcloud
+                  client_name: Nextcloud
+                  client_secret: '${
+                    config.sops.placeholder."nest/authelia/oidc/nextcloud-client-secret-digest"
+                  }'
+                  redirect_uris:
+                    - https://nextcloud.${config.sops.placeholder."nest/domain"}/apps/oidc_login/oidc
+                  scopes:
+                    - openid
+                    - email
+                    - profile
+                  authorization_policy: one_factor
+                  require_pkce: true
+                  pkce_challenge_method: S256
+                  token_endpoint_auth_method: client_secret_basic
         '';
       };
 

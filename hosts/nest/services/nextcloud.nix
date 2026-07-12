@@ -20,6 +20,11 @@ in
         group = "nextcloud";
       };
 
+      sops.secrets."nest/nextcloud/oidc-client-secret" = {
+        owner = "nextcloud";
+        group = "nextcloud";
+      };
+
       sops.templates."nextcloud-secrets.json" = {
         owner = "nextcloud";
         group = "nextcloud";
@@ -30,7 +35,8 @@ in
               "nextcloud.${config.sops.placeholder."nest/domain"}"
             ],
             "overwrite.cli.url": "https://nextcloud.${config.sops.placeholder."nest/domain"}",
-            "overwritehost": "nextcloud.${config.sops.placeholder."nest/domain"}"
+            "overwritehost": "nextcloud.${config.sops.placeholder."nest/domain"}",
+            "oidc_login_provider_url": "https://auth.${config.sops.placeholder."nest/domain"}"
           }
         '';
       };
@@ -49,6 +55,11 @@ in
         maxUploadSize = "16G";
         secretFile = config.sops.templates."nextcloud-secrets.json".path;
         phpOptions."opcache.interned_strings_buffer" = "16";
+        extraApps = {
+          inherit (pkgs.nextcloud33Packages.apps) oidc_login;
+        };
+        extraAppsEnable = true;
+        secrets.oidc_login_client_secret = config.sops.secrets."nest/nextcloud/oidc-client-secret".path;
 
         config = {
           adminuser = "admin";
@@ -62,6 +73,25 @@ in
           overwriteprotocol = "https";
           trusted_proxies = [ "127.0.0.1" ];
           default_phone_region = "RU";
+          oidc_login_client_id = "nextcloud";
+          oidc_login_auto_redirect = false;
+          oidc_login_button_text = "Log in with Authelia";
+          oidc_login_hide_password_form = false;
+          oidc_login_use_id_token = false;
+          oidc_login_attributes = {
+            id = "preferred_username";
+            name = "name";
+            mail = "email";
+          };
+          oidc_login_scope = "openid profile email";
+          oidc_login_proxy_ldap = false;
+          oidc_login_disable_registration = false;
+          oidc_login_redir_fallback = false;
+          oidc_login_tls_verify = true;
+          oidc_create_groups = false;
+          oidc_login_webdav_enabled = false;
+          oidc_login_password_authentication = false;
+          oidc_login_code_challenge_method = "S256";
         };
       };
 
