@@ -14,6 +14,40 @@ in
 {
   config = lib.mkMerge [
     {
+      sops.secrets."nest/immich/oidc-client-secret" = {
+        owner = "immich";
+        group = "immich";
+      };
+
+      sops.templates."immich-config.json" = {
+        owner = "immich";
+        group = "immich";
+        mode = "0400";
+        content = ''
+          {
+            "server": {
+              "externalDomain": "https://immich.${config.sops.placeholder."nest/domain"}"
+            },
+            "oauth": {
+              "enabled": true,
+              "autoLaunch": false,
+              "autoRegister": true,
+              "buttonText": "Login with Authelia",
+              "clientId": "immich",
+              "clientSecret": "${config.sops.placeholder."nest/immich/oidc-client-secret"}",
+              "issuerUrl": "https://auth.${config.sops.placeholder."nest/domain"}",
+              "scope": "openid email profile",
+              "signingAlgorithm": "RS256",
+              "profileSigningAlgorithm": "none",
+              "tokenEndpointAuthMethod": "client_secret_post"
+            },
+            "passwordLogin": {
+              "enabled": true
+            }
+          }
+        '';
+      };
+
       services.immich = {
         enable = true;
         host = "127.0.0.1";
@@ -37,6 +71,8 @@ in
 
         machine-learning.enable = true;
         accelerationDevices = [ "/dev/dri/renderD128" ];
+
+        environment.IMMICH_CONFIG_FILE = config.sops.templates."immich-config.json".path;
       };
 
       services.postgresqlBackup.databases = [ dbName ];

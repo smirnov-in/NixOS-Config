@@ -25,6 +25,21 @@ in
           group = "authelia-main";
         };
 
+        "nest/authelia/oidc-hmac-secret" = {
+          owner = "authelia-main";
+          group = "authelia-main";
+        };
+
+        "nest/authelia/oidc-issuer-private-key" = {
+          owner = "authelia-main";
+          group = "authelia-main";
+        };
+
+        "nest/authelia/oidc/immich-client-secret-digest" = {
+          owner = "authelia-main";
+          group = "authelia-main";
+        };
+
         "nest/lldap/admin-password" = {
           owner = "root";
           group = "authelia-main";
@@ -54,11 +69,45 @@ in
         '';
       };
 
+      sops.templates."authelia-oidc-clients.yml" = {
+        owner = "authelia-main";
+        group = "authelia-main";
+        mode = "0400";
+        content = ''
+          identity_providers:
+            oidc:
+              authorization_policies:
+                admins:
+                  default_policy: deny
+                  rules:
+                    - policy: one_factor
+                      subject:
+                        - group:admins
+              clients:
+                - client_id: immich
+                  client_name: Immich
+                  client_secret: '${config.sops.placeholder."nest/authelia/oidc/immich-client-secret-digest"}'
+                  redirect_uris:
+                    - https://immich.${config.sops.placeholder."nest/domain"}/auth/login
+                    - app.immich:///oauth-callback
+                  scopes:
+                    - openid
+                    - email
+                    - profile
+                  authorization_policy: admins
+                  require_pkce: true
+                  pkce_challenge_method: S256
+                  token_endpoint_auth_method: client_secret_post
+        '';
+      };
+
       services.authelia.instances.main = {
         enable = true;
         secrets = {
           jwtSecretFile = config.sops.secrets."nest/authelia/jwt-secret".path;
           storageEncryptionKeyFile = config.sops.secrets."nest/authelia/storage-encryption-key".path;
+          oidcHmacSecretFile = config.sops.secrets."nest/authelia/oidc-hmac-secret".path;
+          oidcIssuerPrivateKeyFile = config.sops.secrets."nest/authelia/oidc-issuer-private-key".path;
         };
         environmentVariables = {
           AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE =
@@ -66,6 +115,7 @@ in
         };
         settingsFiles = [
           config.sops.templates."authelia-domain.yml".path
+          config.sops.templates."authelia-oidc-clients.yml".path
         ];
         settings = {
           theme = "auto";
