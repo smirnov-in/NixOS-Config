@@ -56,6 +56,7 @@ in
         owner = "authelia-main";
         group = "authelia-main";
         mode = "0400";
+        restartUnits = [ "authelia-main.service" ];
         content = ''
           access_control:
             rules:
@@ -78,6 +79,7 @@ in
         owner = "authelia-main";
         group = "authelia-main";
         mode = "0400";
+        restartUnits = [ "authelia-main.service" ];
         content = ''
           identity_providers:
             oidc:
