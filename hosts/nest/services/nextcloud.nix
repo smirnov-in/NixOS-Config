@@ -48,6 +48,7 @@ in
         configureRedis = true;
         maxUploadSize = "16G";
         secretFile = config.sops.templates."nextcloud-secrets.json".path;
+        phpOptions."opcache.interned_strings_buffer" = "16";
 
         config = {
           adminuser = "admin";
@@ -57,8 +58,10 @@ in
 
         settings = {
           log_type = "systemd";
+          maintenance_window_start = 1;
           overwriteprotocol = "https";
           trusted_proxies = [ "127.0.0.1" ];
+          default_phone_region = "RU";
         };
       };
 
