@@ -121,6 +121,7 @@ let
       before = map (service: "${service}.service") instance.services;
       serviceConfig = {
         NetworkNamespacePath = "/run/netns/${name}";
+        InaccessiblePaths = [ "/run/nscd" ];
         BindReadOnlyPaths = [
           "${mkResolvConf name}:/etc/resolv.conf"
           "${mkNsswitchConf name}:/etc/nsswitch.conf"
@@ -135,6 +136,7 @@ let
       after = [ "wg-quick-${name}.service" ];
       serviceConfig = {
         NetworkNamespacePath = "/run/netns/${name}";
+        InaccessiblePaths = [ "/run/nscd" ];
         BindReadOnlyPaths = [
           "${mkResolvConf name}:/etc/resolv.conf"
           "${mkNsswitchConf name}:/etc/nsswitch.conf"
