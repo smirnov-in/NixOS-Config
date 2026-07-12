@@ -44,7 +44,7 @@ The default rule is conservative:
 | Vaultwarden | Public | Vaultwarden local users | Manual | Yes | Intentionally independent from SSO; admin panel is LAN-only. |
 | Jellyfin | Public | Jellyfin local users | Manual | Yes | Kept local-auth for client compatibility and because LDAP plugin management is not declarative here yet. |
 | Uptime Kuma | LAN/remote CIDR only | Uptime Kuma local users | Manual | Yes | Simple monitoring; no SSO currently. |
-| Seerr | LAN/remote CIDR only | Seerr/Jellyfin local users | Manual | Yes | Request portal for media; kept LAN-only until setup and auth policy are confirmed. |
+| Seerr | LAN/remote CIDR only | Seerr/Jellyfin local users | Manual | Yes | Request portal for media; runs through the Amnezia namespace for TMDB access. |
 | qBittorrent | LAN/remote CIDR only | qBittorrent local users | Manual | Yes | Runs through the Amnezia namespace for outbound traffic. |
 | Prowlarr | LAN/remote CIDR only | Prowlarr local users | Manual | Yes | Runs through the Amnezia namespace for outbound traffic. |
 | Sonarr | LAN/remote CIDR only | Sonarr local users | Manual | Yes | Runs through the Amnezia namespace for outbound traffic. |
@@ -52,10 +52,25 @@ The default rule is conservative:
 | Bazarr | LAN/remote CIDR only | Bazarr local users | Manual | Yes | Runs through the Amnezia namespace for outbound traffic. |
 | Blocky | LAN DNS only | N/A | N/A | N/A | DNS service; no user-facing auth. |
 
+## Seerr setup
+
+Seerr is inside the `amnezia` network namespace because it talks to TMDB
+directly. Caddy reaches Seerr through the namespace address
+`10.77.0.2:5055`.
+
+Use these internal addresses in Seerr:
+
+- Jellyfin: `10.77.0.1:8096`, SSL disabled.
+- Radarr: `127.0.0.1:7878`, SSL disabled.
+- Sonarr: `127.0.0.1:8989`, SSL disabled.
+
+The initial Jellyfin connection should use a dedicated Jellyfin administrator
+account. Daily Jellyfin users do not need administrator rights for Seerr usage.
+
 ## Open questions
 
 - Whether Jellyfin LDAP is worth packaging or managing as a manual plugin.
-- Whether Seerr should become public after setup and auth testing.
+- Whether Seerr should become public after auth policy is settled.
 - Whether the Arr stack should remain locally authenticated or move behind
   Authelia for browser access.
 - Whether `lan_only` should move from a fixed `192.168.1.0/24` to a declared

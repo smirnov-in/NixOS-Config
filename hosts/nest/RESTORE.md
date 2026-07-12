@@ -106,7 +106,9 @@ Downloads under `/srv/downloads` and media under `/srv/media` are not included.
 
 ## Seerr
 
-The Seerr archive contains request portal state from `/var/lib/seerr`.
+The Seerr archive contains request portal state from `/var/lib/seerr`. The
+service uses `DynamicUser`, so `/var/lib/seerr` may be a symlink to
+`/var/lib/private/seerr`.
 
 ```sh
 systemctl stop seerr.service
@@ -114,6 +116,15 @@ workdir="$(mktemp -d)"
 tar --use-compress-program zstd -xf /srv/backups/seerr/seerr-YYYYMMDDTHHMMSSZ.tar.zst -C "$workdir"
 rsync -a --delete "$workdir"/ /var/lib/seerr/
 rm -rf "$workdir"
+systemctl start seerr.service
+```
+
+To reset Seerr completely, stop the service and move the real state directory
+out of the way:
+
+```sh
+systemctl stop seerr.service
+mv /var/lib/private/seerr "/var/lib/private/seerr.reset-$(date --utc +%Y%m%dT%H%M%SZ)"
 systemctl start seerr.service
 ```
 
