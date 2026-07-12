@@ -74,7 +74,7 @@ in
           trusted_proxies = [ "127.0.0.1" ];
           default_phone_region = "RU";
           oidc_login_client_id = "nextcloud";
-          oidc_login_auto_redirect = false;
+          oidc_login_auto_redirect = true;
           oidc_login_button_text = "Log in with Authelia";
           oidc_login_hide_password_form = false;
           oidc_login_use_id_token = false;

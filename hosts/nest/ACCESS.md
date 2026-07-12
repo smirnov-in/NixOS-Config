@@ -40,7 +40,7 @@ The default rule is conservative:
 | Authelia | Public | LLDAP | LLDAP users only | N/A | Authentication portal and OIDC provider. |
 | LLDAP | LAN/remote CIDR only | Local LLDAP admin | Manual | Yes | Directory administration. |
 | Immich | Public | Authelia OIDC | Auto-register enabled | Disabled | Any Authelia user can create an Immich account on first login. |
-| Nextcloud | Public | Authelia OIDC plus local users | Auto-register enabled | Enabled | Local login stays for admin, DAV/app-password, and recovery workflows. |
+| Nextcloud | Public | Authelia OIDC plus local users | Auto-register enabled | Recovery only | SSO is the default login path; local login stays available through `/login?noredir=1`. |
 | Vaultwarden | Public | Vaultwarden local users | Manual | Yes | Admin panel is LAN-only. Revisit SSO later if Vaultwarden support is suitable. |
 | Jellyfin | Public | Jellyfin local users | Manual | Yes | LDAP/SSO is intentionally undecided. Client compatibility matters here. |
 | Uptime Kuma | LAN/remote CIDR only | Uptime Kuma local users | Manual | Yes | Simple monitoring; no SSO currently. |
@@ -57,7 +57,5 @@ The default rule is conservative:
 - Whether Vaultwarden SSO is worth the complexity and recovery tradeoffs.
 - Whether the Arr stack should remain locally authenticated or move behind
   Authelia for browser access.
-- Whether Nextcloud password login can be hidden after DAV/mobile/recovery
-  workflows are tested.
 - Whether `lan_only` should move from a fixed `192.168.1.0/24` to a declared
   home-network option after the LAN addressing plan is settled.
