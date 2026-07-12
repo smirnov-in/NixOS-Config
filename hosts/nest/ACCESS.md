@@ -42,7 +42,7 @@ The default rule is conservative:
 | Immich | Public | Authelia OIDC | Auto-register enabled | Disabled | Any Authelia user can create an Immich account on first login. |
 | Nextcloud | Public | Authelia OIDC plus local users | Auto-register enabled | Recovery only | SSO is the default login path; local login stays available through `/login?noredir=1`. |
 | Vaultwarden | Public | Vaultwarden local users | Manual | Yes | Admin panel is LAN-only. Revisit SSO later if Vaultwarden support is suitable. |
-| Jellyfin | Public | Jellyfin local users | Manual | Yes | LDAP/SSO is intentionally undecided. Client compatibility matters here. |
+| Jellyfin | Public | Jellyfin local users | Manual | Yes | Kept local-auth for client compatibility and because LDAP plugin management is not declarative here yet. |
 | Uptime Kuma | LAN/remote CIDR only | Uptime Kuma local users | Manual | Yes | Simple monitoring; no SSO currently. |
 | qBittorrent | LAN/remote CIDR only | qBittorrent local users | Manual | Yes | Runs through the Amnezia namespace for outbound traffic. |
 | Prowlarr | LAN/remote CIDR only | Prowlarr local users | Manual | Yes | Runs through the Amnezia namespace for outbound traffic. |
@@ -53,7 +53,7 @@ The default rule is conservative:
 
 ## Open questions
 
-- Whether Jellyfin should stay local-only for users or use LDAP/SSO.
+- Whether Jellyfin LDAP is worth packaging or managing as a manual plugin.
 - Whether Vaultwarden SSO is worth the complexity and recovery tradeoffs.
 - Whether the Arr stack should remain locally authenticated or move behind
   Authelia for browser access.
