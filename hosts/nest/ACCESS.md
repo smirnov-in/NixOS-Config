@@ -44,6 +44,7 @@ The default rule is conservative:
 | Vaultwarden | Public | Vaultwarden local users | Manual | Yes | Intentionally independent from SSO; admin panel is LAN-only. |
 | Jellyfin | Public | Jellyfin local users | Manual | Yes | Kept local-auth for client compatibility and because LDAP plugin management is not declarative here yet. |
 | Uptime Kuma | LAN/remote CIDR only | Uptime Kuma local users | Manual | Yes | Simple monitoring; no SSO currently. |
+| Seerr | LAN/remote CIDR only | Seerr/Jellyfin local users | Manual | Yes | Request portal for media; kept LAN-only until setup and auth policy are confirmed. |
 | qBittorrent | LAN/remote CIDR only | qBittorrent local users | Manual | Yes | Runs through the Amnezia namespace for outbound traffic. |
 | Prowlarr | LAN/remote CIDR only | Prowlarr local users | Manual | Yes | Runs through the Amnezia namespace for outbound traffic. |
 | Sonarr | LAN/remote CIDR only | Sonarr local users | Manual | Yes | Runs through the Amnezia namespace for outbound traffic. |
@@ -54,6 +55,7 @@ The default rule is conservative:
 ## Open questions
 
 - Whether Jellyfin LDAP is worth packaging or managing as a manual plugin.
+- Whether Seerr should become public after setup and auth testing.
 - Whether the Arr stack should remain locally authenticated or move behind
   Authelia for browser access.
 - Whether `lan_only` should move from a fixed `192.168.1.0/24` to a declared

@@ -12,6 +12,7 @@
     ./nextcloud.nix
     ./postgresql.nix
     ./remote-access.nix
+    ./seerr.nix
     ./vaultwarden.nix
   ];
 }

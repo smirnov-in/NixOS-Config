@@ -104,6 +104,19 @@ systemctl start qbittorrent.service
 
 Downloads under `/srv/downloads` and media under `/srv/media` are not included.
 
+## Seerr
+
+The Seerr archive contains request portal state from `/var/lib/seerr`.
+
+```sh
+systemctl stop seerr.service
+workdir="$(mktemp -d)"
+tar --use-compress-program zstd -xf /srv/backups/seerr/seerr-YYYYMMDDTHHMMSSZ.tar.zst -C "$workdir"
+rsync -a --delete "$workdir"/ /var/lib/seerr/
+rm -rf "$workdir"
+systemctl start seerr.service
+```
+
 ## Uptime Kuma
 
 The Uptime Kuma archive contains monitors, status pages, users, and check
