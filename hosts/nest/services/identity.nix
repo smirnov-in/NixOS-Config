@@ -76,13 +76,6 @@ in
         content = ''
           identity_providers:
             oidc:
-              authorization_policies:
-                admins:
-                  default_policy: deny
-                  rules:
-                    - policy: one_factor
-                      subject:
-                        - group:admins
               clients:
                 - client_id: immich
                   client_name: Immich
@@ -94,7 +87,7 @@ in
                     - openid
                     - email
                     - profile
-                  authorization_policy: admins
+                  authorization_policy: one_factor
                   require_pkce: true
                   pkce_challenge_method: S256
                   token_endpoint_auth_method: client_secret_post
