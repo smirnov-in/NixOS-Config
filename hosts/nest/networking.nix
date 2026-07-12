@@ -17,7 +17,23 @@
 
     networks."10-eno1" = {
       matchConfig.Name = "eno1";
-      networkConfig.DHCP = "ipv4";
+      networkConfig = {
+        DHCP = "ipv4";
+        DNS = [
+          "9.9.9.9"
+          "149.112.112.112"
+          "1.1.1.1"
+          "1.0.0.1"
+          "8.8.8.8"
+          "8.8.4.4"
+        ];
+      };
+      dhcpV4Config.UseDNS = false;
+      dhcpV6Config.UseDNS = false;
+      ipv6AcceptRAConfig = {
+        DHCPv6Client = false;
+        UseDNS = false;
+      };
     };
   };
 }
