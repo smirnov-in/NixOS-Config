@@ -15,10 +15,30 @@ in
       services.jellyfin = {
         enable = true;
         openFirewall = false;
+        forceEncodingConfig = true;
         hardwareAcceleration = {
           enable = true;
           device = "/dev/dri/renderD128";
           type = "qsv";
+        };
+        transcoding = {
+          enableHardwareEncoding = true;
+          enableIntelLowPowerEncoding = false;
+          enableToneMapping = true;
+          hardwareDecodingCodecs = {
+            h264 = true;
+            hevc = true;
+            hevc10bit = true;
+            mpeg2 = true;
+            vc1 = true;
+            vp8 = true;
+            vp9 = true;
+            av1 = true;
+          };
+          hardwareEncodingCodecs = {
+            hevc = false;
+            av1 = false;
+          };
         };
       };
 
