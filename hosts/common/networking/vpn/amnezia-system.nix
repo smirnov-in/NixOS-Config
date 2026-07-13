@@ -9,5 +9,10 @@
     kernelModules = [ "amneziawg" ];
   };
 
-  environment.systemPackages = [ pkgs.amneziawg-tools ];
+  services.ivpn.enable = true;
+
+  environment.systemPackages = [
+    pkgs.amneziawg-tools
+    pkgs.ivpn
+  ];
 }
