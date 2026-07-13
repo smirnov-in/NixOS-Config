@@ -16,6 +16,9 @@ Caddy provides the shared `lan_only` snippet. A `lan_only` service allows
 clients from `192.168.1.0/24` and temporary remote access CIDRs from
 `NEST_REMOTE_ACCESS_CIDRS`; other clients get `403`.
 
+Temporary remote access only passes the network restriction. Services that
+also use Authelia still require an authorized LLDAP user.
+
 ## Identity
 
 LLDAP is the user directory. Authelia authenticates users from LLDAP and is the
@@ -27,8 +30,10 @@ The default rule is conservative:
 - keep local service accounts where clients or admin flows need them;
 - keep admin and daily user identities separate for user-facing services where
   multiple people have accounts;
-- treat operator-only panels as administrative surfaces instead of creating
-  artificial non-admin users inside each panel;
+- protect operator-only panels with the Authelia `admins` group instead of
+  creating artificial non-admin users inside each panel;
+- retain service-local credentials where APIs, service-to-service connections,
+  or recovery flows require them;
 - do not hide a local login until mobile, DAV, recovery, and admin workflows
   are known to work without it.
 
@@ -45,12 +50,22 @@ The default rule is conservative:
 | Jellyfin | Public | Jellyfin local users | Manual | Yes | Kept local-auth for client compatibility and because LDAP plugin management is not declarative here yet. |
 | Uptime Kuma | LAN/remote CIDR only | Uptime Kuma local users | Manual | Yes | Simple monitoring; no SSO currently. |
 | Seerr | LAN/remote CIDR only | Seerr/Jellyfin local users | Manual | Yes | Request portal for media; runs through the Amnezia namespace for TMDB access. |
-| qBittorrent | LAN/remote CIDR only | qBittorrent local users | Manual | Yes | Runs through the Amnezia namespace for outbound traffic. |
-| Prowlarr | LAN/remote CIDR only | Prowlarr local users | Manual | Yes | Runs through the Amnezia namespace for outbound traffic. |
-| Sonarr | LAN/remote CIDR only | Sonarr local users | Manual | Yes | Runs through the Amnezia namespace for outbound traffic. |
-| Radarr | LAN/remote CIDR only | Radarr local users | Manual | Yes | Runs through the Amnezia namespace for outbound traffic. |
-| Bazarr | LAN/remote CIDR only | Bazarr local users | Manual | Yes | Runs through the Amnezia namespace for outbound traffic. |
+| qBittorrent | LAN/remote CIDR only | Authelia plus qBittorrent local credentials | LLDAP `admins`; local credentials are manual | API/recovery | Browser access requires `admins`; local credentials remain for Arr integration. Runs through Amnezia. |
+| Prowlarr | LAN/remote CIDR only | Authelia plus Prowlarr local credentials | LLDAP `admins`; local credentials are manual | API/recovery | Browser access requires `admins`; local credentials remain for API access. Runs through Amnezia. |
+| Sonarr | LAN/remote CIDR only | Authelia plus Sonarr local credentials | LLDAP `admins`; local credentials are manual | API/recovery | Browser access requires `admins`; local credentials remain for API access. Runs through Amnezia. |
+| Radarr | LAN/remote CIDR only | Authelia plus Radarr local credentials | LLDAP `admins`; local credentials are manual | API/recovery | Browser access requires `admins`; local credentials remain for API access. Runs through Amnezia. |
+| Bazarr | LAN/remote CIDR only | Authelia plus Bazarr local credentials | LLDAP `admins`; local credentials are manual | API/recovery | Browser access requires `admins`; local credentials remain for API access. Runs through Amnezia. |
 | Blocky | LAN DNS only | N/A | N/A | N/A | DNS service; no user-facing auth. |
+
+## Arr browser access
+
+Caddy applies both `lan_only` and Authelia forward authentication to
+qBittorrent, Prowlarr, Sonarr, Radarr, and Bazarr. The Authelia policy permits
+only members of the LLDAP `admins` group.
+
+This browser-level SSO does not replace application credentials. API keys and
+qBittorrent credentials are still used for connections between Prowlarr,
+Sonarr, Radarr, Seerr, and qBittorrent.
 
 ## Seerr setup
 
@@ -71,7 +86,5 @@ account. Daily Jellyfin users do not need administrator rights for Seerr usage.
 
 - Whether Jellyfin LDAP is worth packaging or managing as a manual plugin.
 - Whether Seerr should become public after auth policy is settled.
-- Whether the Arr stack should remain locally authenticated or move behind
-  Authelia for browser access.
 - Whether `lan_only` should move from a fixed `192.168.1.0/24` to a declared
   home-network option after the LAN addressing plan is settled.
