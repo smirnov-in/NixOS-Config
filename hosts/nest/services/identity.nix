@@ -6,12 +6,47 @@
   ...
 }:
 let
+  cfg = config.nest.identity.authelia;
   ldapBaseDn = "dc=duck,dc=home";
   autheliaStateDir = "/var/lib/authelia-main";
   lldapStateDir = "/var/lib/lldap";
   backupDir = "/srv/backups/identity";
+  domain = config.sops.placeholder."nest/domain";
+  mkAdminSubdomainRule = subdomain: [
+    "    - domain: ${subdomain}.${domain}"
+    "      policy: one_factor"
+    "      subject:"
+    "        - group:admins"
+  ];
+  autheliaDomainConfig = lib.concatStringsSep "\n" (
+    [
+      "access_control:"
+      "  rules:"
+      "    - domain: auth.${domain}"
+      "      policy: one_factor"
+      "    - domain: ${domain}"
+      "      policy: one_factor"
+      "      subject:"
+      "        - group:admins"
+    ]
+    ++ lib.concatMap mkAdminSubdomainRule cfg.adminSubdomains
+    ++ [
+      ""
+      "session:"
+      "  cookies:"
+      "    - domain: ${domain}"
+      "      authelia_url: https://auth.${domain}"
+      "      default_redirection_url: https://${domain}"
+      ""
+    ]
+  );
 in
 {
+  options.nest.identity.authelia.adminSubdomains = lib.mkOption {
+    type = lib.types.listOf lib.types.str;
+    default = [ ];
+  };
+
   config = lib.mkMerge [
     {
       sops.secrets = {
@@ -57,22 +92,7 @@ in
         group = "authelia-main";
         mode = "0400";
         restartUnits = [ "authelia-main.service" ];
-        content = ''
-          access_control:
-            rules:
-              - domain: auth.${config.sops.placeholder."nest/domain"}
-                policy: one_factor
-              - domain: ${config.sops.placeholder."nest/domain"}
-                policy: one_factor
-                subject:
-                  - group:admins
-
-          session:
-            cookies:
-              - domain: ${config.sops.placeholder."nest/domain"}
-                authelia_url: https://auth.${config.sops.placeholder."nest/domain"}
-                default_redirection_url: https://${config.sops.placeholder."nest/domain"}
-        '';
+        content = autheliaDomainConfig;
       };
 
       sops.templates."authelia-oidc-clients.yml" = {

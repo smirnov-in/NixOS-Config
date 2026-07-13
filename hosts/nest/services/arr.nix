@@ -6,7 +6,12 @@
   ...
 }:
 let
+  amneziaHostAddress = config.duck.vpn.amnezia.instances.amnezia.hostAddress;
   amneziaAddress = config.duck.vpn.amnezia.instances.amnezia.namespaceAddress;
+  proxyLocalHeaders = ''
+    header_up X-Forwarded-For ${amneziaHostAddress}
+    header_up X-Real-IP ${amneziaHostAddress}
+  '';
   backupDir = "/srv/backups/arr";
   arrStateDirs = [
     "/var/lib/bazarr"
@@ -75,31 +80,54 @@ in
       services.caddy.extraConfig = ''
         qbit.{$NEST_DOMAIN} {
           import lan_only
-          reverse_proxy ${amneziaAddress}:8080
+          import authelia_forward_auth
+          reverse_proxy ${amneziaAddress}:8080 {
+            ${proxyLocalHeaders}
+          }
         }
 
         prowlarr.{$NEST_DOMAIN} {
           import lan_only
-          reverse_proxy ${amneziaAddress}:9696
+          import authelia_forward_auth
+          reverse_proxy ${amneziaAddress}:9696 {
+            ${proxyLocalHeaders}
+          }
         }
 
         sonarr.{$NEST_DOMAIN} {
           import lan_only
-          reverse_proxy ${amneziaAddress}:8989
+          import authelia_forward_auth
+          reverse_proxy ${amneziaAddress}:8989 {
+            ${proxyLocalHeaders}
+          }
         }
 
         radarr.{$NEST_DOMAIN} {
           import lan_only
-          reverse_proxy ${amneziaAddress}:7878
+          import authelia_forward_auth
+          reverse_proxy ${amneziaAddress}:7878 {
+            ${proxyLocalHeaders}
+          }
         }
 
         bazarr.{$NEST_DOMAIN} {
           import lan_only
-          reverse_proxy ${amneziaAddress}:6767
+          import authelia_forward_auth
+          reverse_proxy ${amneziaAddress}:6767 {
+            ${proxyLocalHeaders}
+          }
         }
       '';
 
       nest.dns.splitDnsSubdomains = [
+        "bazarr"
+        "prowlarr"
+        "qbit"
+        "radarr"
+        "sonarr"
+      ];
+
+      nest.identity.authelia.adminSubdomains = [
         "bazarr"
         "prowlarr"
         "qbit"
