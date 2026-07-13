@@ -74,7 +74,9 @@ already exists.
 
 ## Jellyfin
 
-The Jellyfin archive contains `/var/lib/jellyfin` state without logs.
+The Jellyfin archive contains `/var/lib/jellyfin` state without logs. This
+includes installed plugins and their configuration, including the LDAP
+Authentication plugin.
 
 ```sh
 systemctl stop jellyfin.service
