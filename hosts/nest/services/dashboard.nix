@@ -70,6 +70,11 @@ in
         }
       '';
 
+      nest.dns = {
+        splitDnsRoot = true;
+        splitDnsSubdomains = [ "dashboard" ];
+      };
+
       services.homepage-dashboard = {
         enable = true;
         listenPort = 8082;

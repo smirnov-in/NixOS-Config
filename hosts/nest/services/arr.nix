@@ -99,6 +99,14 @@ in
         }
       '';
 
+      nest.dns.splitDnsSubdomains = [
+        "bazarr"
+        "prowlarr"
+        "qbit"
+        "radarr"
+        "sonarr"
+      ];
+
       nest.dashboard.groups.media = [
         {
           qBittorrent = {

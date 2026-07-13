@@ -55,6 +55,8 @@ in
         }
       '';
 
+      nest.dns.splitDnsSubdomains = [ "vault" ];
+
       nest.dashboard.groups.services = [
         {
           Vaultwarden = {

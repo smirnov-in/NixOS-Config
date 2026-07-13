@@ -26,6 +26,8 @@ in
         }
       '';
 
+      nest.dns.splitDnsSubdomains = [ "uptime" ];
+
       nest.dashboard.groups.services = [
         {
           Uptime = {

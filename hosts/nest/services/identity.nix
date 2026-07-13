@@ -220,6 +220,11 @@ in
         ''
       ];
 
+      nest.dns.splitDnsSubdomains = [
+        "auth"
+        "lldap"
+      ];
+
       nest.dashboard.groups.services = [
         {
           Authelia = {

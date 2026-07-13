@@ -26,6 +26,8 @@ in
         }
       '';
 
+      nest.dns.splitDnsSubdomains = [ "seerr" ];
+
       duck.vpn.amnezia.instances.amnezia.services = [ "seerr" ];
 
       nest.dashboard.groups.media = [

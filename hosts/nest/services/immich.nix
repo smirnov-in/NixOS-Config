@@ -83,6 +83,8 @@ in
         }
       '';
 
+      nest.dns.splitDnsSubdomains = [ "immich" ];
+
       nest.dashboard.groups.services = [
         {
           Immich = {

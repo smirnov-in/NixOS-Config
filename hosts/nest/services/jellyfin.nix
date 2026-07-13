@@ -43,6 +43,8 @@ in
         }
       '';
 
+      nest.dns.splitDnsSubdomains = [ "jellyfin" ];
+
       duck.vpn.amnezia.instances.amnezia.hostAllowedTCPPorts = [ 8096 ];
 
       nest.dashboard.groups.services = [

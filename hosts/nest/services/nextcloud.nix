@@ -103,6 +103,8 @@ in
         }
       '';
 
+      nest.dns.splitDnsSubdomains = [ "nextcloud" ];
+
       nest.dashboard.groups.services = [
         {
           Nextcloud = {
