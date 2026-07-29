@@ -23,6 +23,8 @@ in
         owner = "immich";
         group = "immich";
         mode = "0400";
+        # Immich controls password login globally. Keep the local duck-admin
+        # credential dormant and enable this temporarily only for recovery.
         content = ''
           {
             "server": {

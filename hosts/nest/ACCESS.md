@@ -37,6 +37,16 @@ The default rule is conservative:
 - do not hide a local login until mobile, DAV, recovery, and admin workflows
   are known to work without it.
 
+Administrative and daily identities are separate:
+
+- `duck` and other regular users authenticate through SSO where the service
+  supports it and do not receive service-local passwords;
+- `duck-admin` is the personal administrative identity and may also have a
+  service-local recovery password where the service can attach both methods to
+  one account;
+- the built-in LLDAP administrator is reserved for directory administration
+  and recovery, not for normal application access.
+
 ## Services
 
 | Service | Exposure | Identity source | Registration | Local login | Notes |
@@ -44,10 +54,10 @@ The default rule is conservative:
 | Dashboard | LAN/remote CIDR only | Authelia | LLDAP users only | No | Main domain requires the `admins` group. |
 | Authelia | Public | LLDAP | LLDAP users only | N/A | Authentication portal and OIDC provider. |
 | LLDAP | LAN/remote CIDR only | Local LLDAP admin | Manual | Yes | Directory administration. |
-| Immich | Public | Authelia OIDC | Auto-register enabled | Disabled | Any Authelia user can create an Immich account on first login. |
-| Nextcloud | Public | Authelia OIDC plus local users | Auto-register enabled | Recovery only | SSO is the default login path; local login stays available through `/login?noredir=1`. |
+| Immich | Public | Authelia OIDC | Auto-register enabled | Disabled normally | Password login is globally disabled. The local `duck-admin` credential remains dormant and can be enabled temporarily through the NixOS configuration for recovery. |
+| Nextcloud | Public | Authelia OIDC plus local recovery for `duck-admin` | Auto-register enabled | Recovery only | Regular users are SSO-only. Local login for `duck-admin` stays available through `/login?noredir=1`. |
 | Vaultwarden | Public | Vaultwarden local users | Manual | Yes | Intentionally independent from SSO; admin panel is LAN-only. |
-| Jellyfin | Public | LLDAP via the Jellyfin LDAP plugin, plus a local recovery administrator | LDAP users are created on first login | Recovery only | Members of `jellyfin_users` authenticate with LLDAP credentials; local `admin` remains independent. |
+| Jellyfin | Public | LLDAP via the Jellyfin LDAP plugin, plus a local recovery administrator | LDAP users are created on first login | Recovery only | Members of `service_users` authenticate with LLDAP credentials; members of both `service_users` and `admins`, such as `duck-admin`, receive Jellyfin administrator rights. The local recovery administrator remains independent. |
 | Uptime Kuma | LAN/remote CIDR only | Uptime Kuma local users | Manual | Yes | Simple monitoring; no SSO currently. |
 | Seerr | LAN/remote CIDR only | Jellyfin, backed by LLDAP for daily users | On first Jellyfin-backed login | Jellyfin credentials | Seerr delegates authentication to Jellyfin and runs through the Amnezia namespace for TMDB access. |
 | qBittorrent | LAN/remote CIDR only | Authelia plus qBittorrent local credentials | LLDAP `admins`; local credentials are manual | API/recovery | Browser access requires `admins`; local credentials remain for Arr integration. Runs through Amnezia. |
@@ -87,12 +97,17 @@ account. Daily Jellyfin users do not need administrator rights for Seerr usage.
 Jellyfin authentication uses the official LDAP Authentication plugin, installed
 and configured through the Jellyfin web interface. The plugin binds to LLDAP as
 the dedicated `jellyfin_bind` user, which belongs to `lldap_strict_readonly`.
-Users allowed to sign in belong to `jellyfin_users` and are created in Jellyfin
-on their first login.
+Users allowed to sign in belong to `service_users` and are created in Jellyfin
+on their first login. The LDAP administrator filter grants Jellyfin
+administrator rights to members of the LLDAP `admins` group. Consequently,
+`duck-admin` belongs to both `service_users` and `admins`, while ordinary users
+belong only to `service_users`.
 
-The local Jellyfin `admin` account keeps the default authentication provider and
-is reserved for recovery. Do not switch it to LDAP. Seerr delegates its login to
-Jellyfin, so daily users use the same LLDAP credentials there as well.
+The local Jellyfin recovery administrator keeps the default authentication
+provider and is reserved for recovery. Do not switch it to LDAP. The built-in
+LLDAP `admin` remains directory-only and does not belong to `service_users`.
+Seerr delegates its login to Jellyfin, so daily users use the same LLDAP
+credentials there as well.
 
 ## Open questions
 

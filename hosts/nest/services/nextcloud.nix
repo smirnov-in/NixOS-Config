@@ -62,7 +62,7 @@ in
         secrets.oidc_login_client_secret = config.sops.secrets."nest/nextcloud/oidc-client-secret".path;
 
         config = {
-          adminuser = "admin";
+          adminuser = "duck-admin";
           adminpassFile = config.sops.secrets."nest/nextcloud/admin-password".path;
           dbtype = "pgsql";
         };
