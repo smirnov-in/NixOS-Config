@@ -31,6 +31,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Remove after the Niri module reaches a matching Home Manager release.
+    home-manager-niri = {
+      url = "github:nix-community/home-manager/3221e226aa49a94cbc0e82107535ae435da42ef3";
+      flake = false;
+    };
+
     nix-flatpak = {
       url = "github:gmodena/nix-flatpak/v0.7.0";
     };
@@ -53,10 +59,6 @@
     nix-catppuccin = {
       url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nix-niri = {
-      url = "github:sodiboo/niri-flake";
     };
 
     noctalia = {

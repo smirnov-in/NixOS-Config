@@ -1,6 +1,6 @@
 {
-  config,
   inputs,
+  lib,
   pkgs,
   ...
 }:
@@ -11,10 +11,11 @@ let
       "noctalia"
       "msg"
     ]
-    ++ (pkgs.lib.splitString " " cmd);
+    ++ (lib.splitString " " cmd);
 in
 {
   imports = [
+    (inputs.home-manager-niri + "/modules/services/window-managers/niri.nix")
     inputs.noctalia.homeModules.default
   ];
 
@@ -22,158 +23,197 @@ in
     wl-clipboard
   ];
 
-  programs.niri.settings = {
-    spawn-at-startup = [
-      {
-        command = [ "noctalia" ];
-      }
-    ];
-    input = {
-      focus-follows-mouse = {
-        enable = true;
-        max-scroll-amount = "90%";
-      };
+  wayland.windowManager.niri = {
+    enable = true;
+    # Keep the package here so Home Manager validates the generated KDL.
+    package = pkgs.niri;
 
-      keyboard.xkb = {
-        layout = "us,ru";
-        options = "shift:both_capslock_cancel,caps:escape,grp:win_space_toggle";
-      };
+    # The NixOS configuration owns the session, systemd units, portals, and XWayland.
+    systemd.enable = false;
+    portalPackage = null;
+    xwaylandSatellitePackage = null;
 
-      trackpoint = {
-        accel-profile = "flat";
-        accel-speed = 0.2;
-      };
-    };
+    settings = {
+      _children = [
+        {
+          output = {
+            _args = [ "PNP(AOC) 24P1W1 UIRP1HA000231" ];
+            transform = "normal";
+            position._props = {
+              x = 0;
+              y = 0;
+            };
+          };
+        }
+        {
+          output = {
+            _args = [ "PNP(AOC) 24P1W1 RJWNBHA000278" ];
+            transform = "normal";
+            position._props = {
+              x = 1920;
+              y = 0;
+            };
+          };
+        }
+        {
+          window-rule = {
+            clip-to-geometry = true;
+            geometry-corner-radius = [
+              20.0
+              20.0
+              20.0
+              20.0
+            ];
+          };
+        }
+        {
+          layer-rule = {
+            match._props.namespace = "^noctalia-overview*";
+            place-within-backdrop = true;
+          };
+        }
+      ];
 
-    clipboard.disable-primary = true;
+      spawn-at-startup = [ "noctalia" ];
+      screenshot-path = "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png";
 
-    outputs = {
-      "PNP(AOC) 24P1W1 UIRP1HA000231" = {
-        position = {
-          x = 0;
-          y = 0;
+      input = {
+        focus-follows-mouse._props.max-scroll-amount = "90%";
+
+        keyboard = {
+          repeat-delay = 600;
+          repeat-rate = 25;
+          track-layout = "global";
+          xkb = {
+            layout = "us,ru";
+            model = "";
+            options = "shift:both_capslock_cancel,caps:escape,grp:win_space_toggle";
+            rules = "";
+            variant = "";
+          };
+        };
+
+        touchpad = {
+          natural-scroll = { };
+          tap = { };
+        };
+
+        trackpoint = {
+          accel-profile = "flat";
+          accel-speed = 0.2;
         };
       };
 
-      "PNP(AOC) 24P1W1 RJWNBHA000278" = {
-        position = {
-          x = 1920;
-          y = 0;
+      clipboard.disable-primary = { };
+      cursor = {
+        xcursor-size = 24;
+        xcursor-theme = "Adwaita";
+      };
+      gestures.hot-corners.off = { };
+      prefer-no-csd = { };
+      hotkey-overlay.skip-at-startup = { };
+
+      layout = {
+        border.off = { };
+        center-focused-column = "never";
+        default-column-width = { };
+        gaps = 12;
+        focus-ring = {
+          active-color = "#cba6f7";
+          width = 4;
+        };
+        shadow = {
+          color = "#00000070";
+          draw-behind-window = false;
+          offset._props = {
+            x = 0.0;
+            y = 5.0;
+          };
+          on = { };
+          softness = 30.0;
+          spread = 5.0;
+        };
+        struts = {
+          bottom = 0;
+          left = 0;
+          right = 0;
+          top = 0;
         };
       };
-    };
 
-    cursor.theme = "Adwaita";
+      debug.honor-xdg-activation-with-invalid-serial = { };
 
-    gestures = {
-      hot-corners.enable = false;
-    };
+      binds = {
+        "Mod+Shift+Slash".show-hotkey-overlay = { };
+        "Mod+Shift+E".quit = { };
 
-    prefer-no-csd = true;
-    hotkey-overlay.skip-at-startup = true;
+        "Mod+T".spawn = [ "ghostty" ];
+        "Mod+B".spawn = [ "firefox" ];
 
-    layout = {
-      shadow.enable = true;
-      gaps = 12;
-      focus-ring = {
-        enable = true;
-        active.color = "#cba6f7";
+        "Mod+H".focus-column-left = { };
+        "Mod+J".focus-workspace-down = { };
+        "Mod+K".focus-workspace-up = { };
+        "Mod+L".focus-column-right = { };
+        "Mod+U".focus-window-down = { };
+        "Mod+I".focus-window-up = { };
+
+        "Mod+Shift+H".move-column-left = { };
+        "Mod+Shift+J".move-column-to-workspace-down = { };
+        "Mod+Shift+K".move-column-to-workspace-up = { };
+        "Mod+Shift+L".move-column-right = { };
+        "Mod+Shift+U".move-window-down = { };
+        "Mod+Shift+I".move-window-up = { };
+
+        "Mod+Ctrl+H".focus-monitor-left = { };
+        "Mod+Ctrl+J".focus-monitor-down = { };
+        "Mod+Ctrl+K".focus-monitor-up = { };
+        "Mod+Ctrl+L".focus-monitor-right = { };
+
+        "Mod+Shift+Ctrl+H".move-column-to-monitor-left = { };
+        "Mod+Shift+Ctrl+J".move-column-to-monitor-down = { };
+        "Mod+Shift+Ctrl+K".move-column-to-monitor-up = { };
+        "Mod+Shift+Ctrl+L".move-column-to-monitor-right = { };
+
+        "Mod+BracketLeft".consume-or-expel-window-left = { };
+        "Mod+BracketRight".consume-or-expel-window-right = { };
+        "Mod+Comma".consume-window-into-column = { };
+        "Mod+Period".expel-window-from-column = { };
+
+        "Mod+O".toggle-overview = { };
+
+        "Mod+R".switch-preset-column-width = { };
+        "Mod+Shift+R".switch-preset-window-height = { };
+        "Mod+Ctrl+R".reset-window-height = { };
+        "Mod+F".maximize-column = { };
+        "Mod+Shift+F".fullscreen-window = { };
+        "Mod+Ctrl+F".expand-column-to-available-width = { };
+
+        "Mod+C".center-column = { };
+        "Mod+Shift+C".center-visible-columns = { };
+
+        "Mod+Minus".set-column-width = [ "-10%" ];
+        "Mod+Equal".set-column-width = [ "+10%" ];
+        "Mod+Shift+Minus".set-window-height = [ "-10%" ];
+        "Mod+Shift+Equal".set-window-height = [ "+10%" ];
+
+        "Mod+G".toggle-window-floating = { };
+        "Mod+Shift+G".switch-focus-between-floating-and-tiling = { };
+        "Mod+Q".close-window = { };
+
+        "Mod+D".spawn = noctalia "panel-toggle launcher";
+
+        "XF86AudioMute".spawn = noctalia "volume-mute";
+        "XF86AudioLowerVolume".spawn = noctalia "volume-down";
+        "XF86AudioRaiseVolume".spawn = noctalia "volume-up";
+        "XF86AudioMicMute".spawn = noctalia "mic-mute";
+
+        "XF86MonBrightnessDown".spawn = noctalia "brightness-down";
+        "XF86MonBrightnessUp".spawn = noctalia "brightness-up";
+
+        "Print".screenshot = { };
+        "Mod+Print".screenshot-screen = { };
+        "Shift+Print".screenshot-window = { };
       };
-    };
-
-    window-rules = [
-      {
-        clip-to-geometry = true;
-        geometry-corner-radius = {
-          bottom-left = 20.0;
-          bottom-right = 20.0;
-          top-left = 20.0;
-          top-right = 20.0;
-        };
-      }
-    ];
-
-    layer-rules = [
-      {
-        matches = [ { namespace = "^noctalia-overview*"; } ];
-        place-within-backdrop = true;
-      }
-    ];
-
-    debug = {
-      honor-xdg-activation-with-invalid-serial = [ ];
-    };
-
-    binds = with config.lib.niri.actions; {
-      "Mod+Shift+Slash".action = show-hotkey-overlay;
-      "Mod+Shift+E".action = quit;
-
-      "Mod+T".action.spawn = "ghostty";
-      "Mod+B".action.spawn = "firefox";
-
-      "Mod+H".action = focus-column-left;
-      "Mod+J".action = focus-workspace-down;
-      "Mod+K".action = focus-workspace-up;
-      "Mod+L".action = focus-column-right;
-      "Mod+U".action = focus-window-down;
-      "Mod+I".action = focus-window-up;
-
-      "Mod+Shift+H".action = move-column-left;
-      "Mod+Shift+J".action = move-column-to-workspace-down;
-      "Mod+Shift+K".action = move-column-to-workspace-up;
-      "Mod+Shift+L".action = move-column-right;
-      "Mod+Shift+U".action = move-window-down;
-      "Mod+Shift+I".action = move-window-up;
-
-      "Mod+Ctrl+H".action = focus-monitor-left;
-      "Mod+Ctrl+J".action = focus-monitor-down;
-      "Mod+Ctrl+K".action = focus-monitor-up;
-      "Mod+Ctrl+L".action = focus-monitor-right;
-
-      "Mod+Shift+Ctrl+H".action = move-column-to-monitor-left;
-      "Mod+Shift+Ctrl+J".action = move-column-to-monitor-down;
-      "Mod+Shift+Ctrl+K".action = move-column-to-monitor-up;
-      "Mod+Shift+Ctrl+L".action = move-column-to-monitor-right;
-
-      "Mod+BracketLeft".action = consume-or-expel-window-left;
-      "Mod+BracketRight".action = consume-or-expel-window-right;
-      "Mod+Comma".action = consume-window-into-column;
-      "Mod+Period".action = expel-window-from-column;
-
-      "Mod+O".action = toggle-overview;
-
-      "Mod+R".action = switch-preset-column-width;
-      "Mod+Shift+R".action = switch-preset-window-height;
-      "Mod+Ctrl+R".action = reset-window-height;
-      "Mod+F".action = maximize-column;
-      "Mod+Shift+F".action = fullscreen-window;
-      "Mod+Ctrl+F".action = expand-column-to-available-width;
-
-      "Mod+C".action = center-column;
-      "Mod+Shift+C".action = center-visible-columns;
-
-      "Mod+Minus".action = set-column-width "-10%";
-      "Mod+Equal".action = set-column-width "+10%";
-      "Mod+Shift+Minus".action = set-window-height "-10%";
-      "Mod+Shift+Equal".action = set-window-height "+10%";
-
-      "Mod+G".action = toggle-window-floating;
-      "Mod+Shift+G".action = switch-focus-between-floating-and-tiling;
-      "Mod+Q".action = close-window;
-
-      "Mod+D".action.spawn = noctalia "panel-toggle launcher";
-
-      "XF86AudioMute".action.spawn = noctalia "volume-mute";
-      "XF86AudioLowerVolume".action.spawn = noctalia "volume-down";
-      "XF86AudioRaiseVolume".action.spawn = noctalia "volume-up";
-      "XF86AudioMicMute".action.spawn = noctalia "mic-mute";
-
-      "XF86MonBrightnessDown".action.spawn = noctalia "brightness-down";
-      "XF86MonBrightnessUp".action.spawn = noctalia "brightness-up";
-
-      "Print".action.screenshot = { };
-      "Mod+Print".action.screenshot-screen = { };
-      "Shift+Print".action.screenshot-window = { };
     };
   };
 
