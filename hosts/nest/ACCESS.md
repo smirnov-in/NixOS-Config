@@ -109,6 +109,12 @@ LLDAP `admin` remains directory-only and does not belong to `service_users`.
 Seerr delegates its login to Jellyfin, so daily users use the same LLDAP
 credentials there as well.
 
+Jellyfin remains in the host network namespace so its public endpoint, LDAP
+configuration, and Seerr integration keep their existing addresses. Its
+outbound HTTP and HTTPS traffic uses Tinyproxy inside the `amnezia` namespace,
+so TMDB metadata and artwork requests leave through the VPN. Loopback traffic
+is excluded from the proxy for the local LDAP connection.
+
 ## Open questions
 
 - Whether Seerr should become public after auth policy is settled.

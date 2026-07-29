@@ -6,6 +6,10 @@
   ...
 }:
 let
+  amneziaHostAddress = config.duck.vpn.amnezia.instances.amnezia.hostAddress;
+  amneziaAddress = config.duck.vpn.amnezia.instances.amnezia.namespaceAddress;
+  vpnProxyPort = 8888;
+  vpnProxyUrl = "http://${amneziaAddress}:${toString vpnProxyPort}";
   dataDir = "/var/lib/jellyfin";
   backupDir = "/srv/backups/jellyfin";
 in
@@ -42,6 +46,29 @@ in
         };
       };
 
+      services.tinyproxy = {
+        enable = true;
+        settings = {
+          Listen = amneziaAddress;
+          Port = vpnProxyPort;
+          Allow = amneziaHostAddress;
+          DisableViaHeader = true;
+        };
+      };
+
+      systemd.services.jellyfin = {
+        wants = [ "tinyproxy.service" ];
+        after = [ "tinyproxy.service" ];
+        environment = {
+          HTTP_PROXY = vpnProxyUrl;
+          HTTPS_PROXY = vpnProxyUrl;
+          NO_PROXY = "localhost,127.0.0.1,::1";
+          http_proxy = vpnProxyUrl;
+          https_proxy = vpnProxyUrl;
+          no_proxy = "localhost,127.0.0.1,::1";
+        };
+      };
+
       hardware.graphics = {
         enable = true;
         extraPackages = with pkgs; [
@@ -66,6 +93,7 @@ in
       nest.dns.splitDnsSubdomains = [ "jellyfin" ];
 
       duck.vpn.amnezia.instances.amnezia.hostAllowedTCPPorts = [ 8096 ];
+      duck.vpn.amnezia.instances.amnezia.services = [ "tinyproxy" ];
 
       nest.dashboard.groups.services = [
         {
