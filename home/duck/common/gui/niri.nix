@@ -15,6 +15,7 @@ let
 in
 {
   imports = [
+    ./gtk.nix
     (inputs.home-manager-niri + "/modules/services/window-managers/niri.nix")
     inputs.noctalia.homeModules.default
   ];

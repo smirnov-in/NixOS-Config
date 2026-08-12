@@ -46,6 +46,7 @@
         "browser.startup.page" = 3;
         "signon.rememberSignons" = false;
         "signon.management.page.breach-alerts.enabled" = false;
+        "middlemouse.paste" = false;
         "app.shield.optoutstudies.enabled" = false;
         "datareporting.healthreport.uploadEnabled" = false;
         "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
