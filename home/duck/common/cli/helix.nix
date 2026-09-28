@@ -11,6 +11,11 @@
         inline-diagnostics = {
           cursor-line = "error";
         };
+        rulers = [
+          80
+          100
+          120
+        ];
       };
     };
 
