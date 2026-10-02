@@ -1,8 +1,29 @@
-{ config, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
+let
+  pkgsUnstable = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+in
 {
   imports = [
     ../../common/networking/vpn/amnezia.nix
   ];
+
+  # AWG 3.1 needs newer tools and a module built for the host's stable kernel.
+  nixpkgs.overlays = [
+    (_final: _prev: {
+      amneziawg-tools = pkgsUnstable.amneziawg-tools;
+    })
+  ];
+
+  boot.kernelPackages = pkgs.linuxPackages.extend (
+    kernelFinal: _kernelPrev: {
+      amneziawg = (pkgsUnstable.linuxPackagesFor kernelFinal.kernel).amneziawg;
+    }
+  );
 
   sops.secrets."vpn/amnezia-conf" = {
     owner = "root";
