@@ -75,9 +75,6 @@
       inherit (nixpkgs) lib;
       configLib = import ./lib { inherit lib; };
       system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-      };
       pkgsUnstable = import inputs.nixpkgs-unstable {
         inherit system;
         config.allowUnfree = true;
