@@ -13,6 +13,7 @@
 
     ../common/networking/vpn/amnezia-system.nix
     ../common/services/printing.nix
+    ../common/services/udisks.nix
     ../common/services/virtualisation.nix
 
     ../common/security/fingerprint.nix

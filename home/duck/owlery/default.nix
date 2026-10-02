@@ -16,6 +16,7 @@
     ../common/gui/wl-mirror.nix
 
     ../common/services/openconnect.nix
+    ../common/services/udiskie.nix
   ];
 
   home.stateVersion = "25.05";
