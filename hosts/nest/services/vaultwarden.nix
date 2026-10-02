@@ -21,6 +21,7 @@ in
         owner = "vaultwarden";
         group = "vaultwarden";
         mode = "0400";
+        restartUnits = [ "vaultwarden.service" ];
         content = ''
           DOMAIN=https://vault.${config.sops.placeholder."nest/domain"}
           ADMIN_TOKEN=${config.sops.placeholder."nest/vaultwarden/admin-token"}
