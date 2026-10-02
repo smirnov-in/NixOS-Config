@@ -148,7 +148,10 @@ in
         "Mod+Shift+Slash".show-hotkey-overlay = { };
         "Mod+Shift+E".quit = { };
 
-        "Mod+T".spawn = [ "ghostty" ];
+        "Mod+T".spawn = [
+          "ghostty"
+          "+new-window"
+        ];
         "Mod+B".spawn = [ "firefox" ];
 
         "Mod+H".focus-column-left = { };
