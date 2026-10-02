@@ -22,6 +22,7 @@ let
   ];
   arrServices = [
     "bazarr"
+    "flaresolverr"
     "prowlarr"
     "qbittorrent"
     "radarr"
@@ -51,6 +52,12 @@ in
 
       services.prowlarr = {
         enable = true;
+        openFirewall = false;
+      };
+
+      services.flaresolverr = {
+        enable = true;
+        port = 8191;
         openFirewall = false;
       };
 
@@ -192,6 +199,11 @@ in
       ];
 
       systemd.services = {
+        flaresolverr.environment = {
+          HOST = "127.0.0.1";
+          # Info/debug logs include POST bodies containing indexer credentials.
+          LOG_LEVEL = "warning";
+        };
         bazarr.serviceConfig.ReadWritePaths = [
           "/srv/downloads"
           "/srv/media"

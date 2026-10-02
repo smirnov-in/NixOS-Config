@@ -77,6 +77,41 @@ This browser-level SSO does not replace application credentials. API keys and
 qBittorrent credentials are still used for connections between Prowlarr,
 Sonarr, Radarr, Seerr, and qBittorrent.
 
+### Cloudflare-protected indexers
+
+FlareSolverr runs alongside Prowlarr in the `amnezia` network namespace. Its
+API listens only on `127.0.0.1:8191` inside that namespace; it has no Caddy
+route or open firewall port. Both services use the same VPN egress.
+
+Configure the integration in Prowlarr:
+
+1. Open **Settings -> Indexer Proxies -> Add -> FlareSolverr**.
+2. Set **Name** to `FlareSolverr`, **Host** to `http://127.0.0.1:8191`,
+   **Request Timeout** to `60` seconds, and **Tags** to `rutracker`.
+   Enable **Show Advanced** if the timeout field is hidden.
+3. Test and save the proxy. It remains disabled until an indexer has the
+   matching tag.
+4. Edit RuTracker, choose `https://rutracker.org/` as **Base URL**, and add
+   the same `rutracker` tag. Test and save the indexer.
+
+Keep **Settings -> General -> Proxy** unchanged: FlareSolverr is an indexer
+helper, not a general HTTP proxy. Prowlarr invokes it when it detects a
+Cloudflare challenge. Passing the proxy test only verifies the integration;
+the RuTracker test must pass separately, and not every challenge can be solved.
+
+FlareSolverr logs at `warning` level because `info` and `debug` can include
+request bodies containing indexer credentials. Do not enable verbose logging
+while sending real credentials. Its runtime state is disposable; the proxy
+configuration and indexer tags are stored in Prowlarr's database and covered
+by Prowlarr's built-in backups.
+
+After activation, check the service from `nest`:
+
+```sh
+systemctl is-active flaresolverr.service
+sudo ip netns exec amnezia curl --noproxy '*' --fail --silent --show-error --max-time 10 http://127.0.0.1:8191/health
+```
+
 ## Seerr setup
 
 Seerr is inside the `amnezia` network namespace because it talks to TMDB
