@@ -10,6 +10,7 @@ in
 
     settings = {
       quit-after-last-window-closed = false;
+      window-decoration = "client";
       # font-family = "JetBrainsMono Nerd Font";
       font-feature = [
         "calt"
