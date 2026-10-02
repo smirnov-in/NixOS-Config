@@ -29,6 +29,11 @@ in
     owner = "root";
     group = "root";
     mode = "0400";
+    restartUnits = [
+      "amnezia-config-amnezia.service"
+      "wg-quick-amnezia.service"
+    ]
+    ++ map (service: "${service}.service") config.duck.vpn.amnezia.instances.amnezia.services;
   };
 
   duck.vpn.amnezia.instances.amnezia = {
