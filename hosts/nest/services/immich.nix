@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   options,
   pkgs,
@@ -52,6 +53,8 @@ in
 
       services.immich = {
         enable = true;
+        # 26.05 ships unsupported Immich 2.x with known vulnerabilities.
+        package = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.immich;
         host = "127.0.0.1";
         port = 2283;
         openFirewall = false;
